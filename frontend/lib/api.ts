@@ -48,6 +48,27 @@ export type TargetedFollowup = {
   content: string;
 };
 
+export type SpeakerInfo = {
+  speaker_id: string;
+  name: string;
+  role: string;
+  perspective: string;
+  style: string;
+  location: string;
+  map_x: number;
+  map_y: number;
+  latitude: number;
+  longitude: number;
+};
+
+export type SpeakerChatResponse = {
+  thread_id: string;
+  speaker_id: string;
+  speaker_name: string;
+  role: string;
+  answer: string;
+};
+
 export type RoundtableStreamEvent =
   | { type: "start"; thread_id: string; topic: string }
   | { type: "plan_start" }
@@ -92,6 +113,37 @@ const API_URL = process.env.NEXT_PUBLIC_AGENT_API_URL ?? "http://127.0.0.1:8000"
 
 export async function sendChat(payload: ChatRequest): Promise<ChatResponse> {
   const response = await fetch(`${API_URL}/api/chat`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(payload)
+  });
+
+  if (!response.ok) {
+    throw new Error(`HTTP ${response.status}`);
+  }
+
+  return response.json();
+}
+
+export async function getRoundtableSpeakers(): Promise<SpeakerInfo[]> {
+  const response = await fetch(`${API_URL}/api/roundtable/speakers`);
+
+  if (!response.ok) {
+    throw new Error(`HTTP ${response.status}`);
+  }
+
+  return response.json();
+}
+
+export async function sendSpeakerChat(payload: {
+  message: string;
+  speaker_id: string;
+  thread_id: string | null;
+  messages: ChatMessage[];
+}): Promise<SpeakerChatResponse> {
+  const response = await fetch(`${API_URL}/api/roundtable/speaker-chat`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json"

@@ -7,6 +7,11 @@ class RoundtableSpeaker(TypedDict):
     role: str
     perspective: str
     style: str
+    location: str
+    map_x: int
+    map_y: int
+    latitude: float
+    longitude: float
 
 
 class RoundtableTurn(TypedDict):
@@ -23,4 +28,3 @@ class RoundtableState(TypedDict):
     moderator_plan: str
     turns: list[RoundtableTurn]
     summary: str
-

@@ -8,6 +8,11 @@ SPEAKERS: list[RoundtableSpeaker] = [
         "role": "追问者",
         "perspective": "关注定义、前提、矛盾和人为什么相信某个判断。",
         "style": "用简短问题逼近本质，语气平静，不急着给答案。",
+        "location": "雅典",
+        "map_x": 52,
+        "map_y": 47,
+        "latitude": 37.9838,
+        "longitude": 23.7275,
     },
     {
         "speaker_id": "jobs",
@@ -15,6 +20,11 @@ SPEAKERS: list[RoundtableSpeaker] = [
         "role": "产品与体验视角",
         "perspective": "关注人真正想要什么、体验是否简洁、审美和技术如何合一。",
         "style": "直接、挑剔、有产品直觉，强调少即是多。",
+        "location": "加州",
+        "map_x": 18,
+        "map_y": 43,
+        "latitude": 37.323,
+        "longitude": -122.0322,
     },
     {
         "speaker_id": "musk",
@@ -22,6 +32,11 @@ SPEAKERS: list[RoundtableSpeaker] = [
         "role": "工程与第一性原理视角",
         "perspective": "关注物理约束、成本、速度、规模化和执行路径。",
         "style": "拆到第一性原理，偏工程化，愿意提出大胆目标。",
+        "location": "比勒陀利亚",
+        "map_x": 54,
+        "map_y": 74,
+        "latitude": -25.7479,
+        "longitude": 28.2293,
     },
     {
         "speaker_id": "davinci",
@@ -29,6 +44,10 @@ SPEAKERS: list[RoundtableSpeaker] = [
         "role": "跨学科观察者",
         "perspective": "关注自然形态、艺术与科学的互相启发，以及观察带来的创造。",
         "style": "富有画面感，连接结构、比例、运动和想象。",
+        "location": "佛罗伦萨",
+        "map_x": 50,
+        "map_y": 45,
+        "latitude": 43.7696,
+        "longitude": 11.2558,
     },
 ]
-

@@ -14,6 +14,8 @@
 
 - `/api/chat`：单轮问答接口。
 - `/api/roundtable`：圆桌讨论接口。
+- `/api/roundtable/speakers`：圆桌角色与地图位置接口。
+- `/api/roundtable/speaker-chat`：地图角色的一对一对话接口。
 - `/api/roundtable/stream`：圆桌流式输出接口。
 - `/api/roundtable/followup/stream`：针对某位 speaker 的追问流式接口。
 - `/health`：后端健康检查。

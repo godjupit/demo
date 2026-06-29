@@ -7,7 +7,7 @@ from fastapi.responses import StreamingResponse
 from pydantic import BaseModel, Field
 
 from app.roundtable.graph import roundtable_graph
-from app.roundtable.llm import stream_llm
+from app.roundtable.llm import call_llm, stream_llm
 from app.roundtable.prompts import (
     MODERATOR_PLAN_TEMPLATE,
     SPEAKER_TEMPLATE,
@@ -42,6 +42,40 @@ class RoundtableResponse(BaseModel):
     moderator_plan: str
     turns: list[RoundtableTurn]
     summary: str
+
+
+class SpeakerInfo(BaseModel):
+    speaker_id: str
+    name: str
+    role: str
+    perspective: str
+    style: str
+    location: str
+    map_x: int
+    map_y: int
+    latitude: float
+    longitude: float
+
+
+class SpeakerChatMessage(BaseModel):
+    role: str
+    content: str
+
+
+class SpeakerChatRequest(BaseModel):
+    message: str = Field(..., min_length=1)
+    speaker_id: str = Field(..., min_length=1)
+    thread_id: Optional[str] = None
+    user_id: Optional[str] = None
+    messages: list[SpeakerChatMessage] = Field(default_factory=list)
+
+
+class SpeakerChatResponse(BaseModel):
+    thread_id: str
+    speaker_id: str
+    speaker_name: str
+    role: str
+    answer: str
 
 
 RoundtableRequest.model_rebuild()
@@ -98,12 +132,88 @@ def _format_history(history: list[RoundtableResponse]) -> str:
     return "\n\n".join(blocks)
 
 
+def _format_chat_messages(messages: list[SpeakerChatMessage]) -> str:
+    if not messages:
+        return "暂无。"
+    return "\n".join(
+        f"{'用户' if message.role == 'user' else '角色'}：{message.content}"
+        for message in messages[-10:]
+    )
+
+
 def _stream_text(event: str, data: dict, characters) -> tuple[str, list[str]]:
     content: list[str] = []
     for character in characters:
         content.append(character)
         yield _sse(event, {**data, "delta": character})
     return "".join(content)
+
+
+@router.get("/roundtable/speakers", response_model=list[SpeakerInfo])
+def roundtable_speakers() -> list[SpeakerInfo]:
+    return [SpeakerInfo(**speaker) for speaker in SPEAKERS]
+
+
+@router.post("/roundtable/speaker-chat", response_model=SpeakerChatResponse)
+def speaker_chat(request: SpeakerChatRequest) -> SpeakerChatResponse:
+    speaker = next(
+        (item for item in SPEAKERS if item["speaker_id"] == request.speaker_id),
+        None,
+    )
+    if not speaker:
+        return SpeakerChatResponse(
+            thread_id=request.thread_id or str(uuid4()),
+            speaker_id=request.speaker_id,
+            speaker_name="未知角色",
+            role="",
+            answer="没有找到这位圆桌角色，请重新选择一位地图上的人物。",
+        )
+
+    thread_id = request.thread_id or str(uuid4())
+    prompt = f"""你正在和用户进行一对一对话。
+
+重要边界：
+- 你不是历史人物或公众人物本人，而是以其公开思想风格构建的讨论视角。
+- 不要声称拥有该人物的私人记忆、实时经历、真实承诺或未公开观点。
+- 回答要像单人聊天，不要称自己正在参加圆桌。
+
+你的角色：
+姓名：{speaker['name']}
+身份：{speaker['role']}
+视角：{speaker['perspective']}
+表达风格：{speaker['style']}
+
+最近对话：
+{_format_chat_messages(request.messages)}
+
+用户新问题：
+{request.message}
+
+请用中文回答，要求：
+- 80 到 180 字
+- 直接回应用户
+- 保持这个角色的思考方式和表达风格
+- 可以留一个自然的追问方向
+- 不要使用 Markdown 加粗符号，例如 **重点**
+"""
+    fallback = (
+        f"从{speaker['name']}这个讨论视角看，我会先把你的问题放回"
+        f"{speaker['perspective']}。关键不是立刻给出漂亮结论，而是确认这个判断"
+        "是否经得起定义、体验和行动的检验。你可以继续追问我其中一个前提。"
+    )
+    answer = call_llm(
+        f"你以{speaker['name']}的公开思想风格进行一对一对话，但不是本人。",
+        prompt,
+        fallback,
+    )
+
+    return SpeakerChatResponse(
+        thread_id=thread_id,
+        speaker_id=speaker["speaker_id"],
+        speaker_name=speaker["name"],
+        role=speaker["role"],
+        answer=answer,
+    )
 
 
 @router.post("/roundtable", response_model=RoundtableResponse)
