@@ -13,6 +13,7 @@
 当前仓库里已经包含这些入口：
 
 - `/api/chat`：单轮问答接口。
+- `/api/conversations/{agent_id}/{thread_id}`：按 thread 恢复持久化对话。
 - `/api/roundtable`：圆桌讨论接口。
 - `/api/roundtable/speakers`：圆桌角色与地图位置接口。
 - `/api/roundtable/speaker-chat`：地图角色的一对一对话接口。
@@ -69,7 +70,27 @@ cp .env.example .env
 - `OPENAI_API_KEY`：OpenAI 或兼容模型的 API Key。
 - `OPENAI_URL`：可选，自定义模型服务地址。
 - `OPENAI_CHAT_MODEL`：默认聊天模型名，当前示例为 `gpt-4o-mini`。
+- `DATABASE_URL`：PostgreSQL 连接地址，默认 `postgresql://community:community@localhost:5432/community_agents`。
 - `FRONTEND_ORIGIN`：前端访问源，用于 CORS 配置。
+
+## PostgreSQL 记忆持久化
+
+对话会写入 `conversations` 表：
+
+- 普通 `/api/chat`：按 `agent_id + thread_id` 保存完整 messages。
+- 首页地图单人对话：按 `roundtable-speaker:{speaker_id} + thread_id` 保存。
+- 圆桌讨论：按 `roundtable + thread_id` 保存。
+
+如果只需要对话记忆，普通数据库用户应用 `memory_schema.sql` 即可：
+
+```bash
+cd backend
+python -c "from pathlib import Path; import psycopg; from app.core.settings import settings; sql=Path('app/db/memory_schema.sql').read_text(); conn=psycopg.connect(settings.database_url); conn.execute(sql); conn.commit(); conn.close()"
+```
+
+完整知识库 schema 里的 `vector` 扩展需要 PostgreSQL superuser 权限；如果要启用向量检索，再用 `postgres` 用户应用 `schema.sql`。
+
+首页会把每位角色的 `thread_id` 存在浏览器 localStorage，刷新页面后再通过后端从 PostgreSQL 拉回消息历史。
 
 启动后端服务：
 

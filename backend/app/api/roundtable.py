@@ -6,6 +6,7 @@ from fastapi import APIRouter
 from fastapi.responses import StreamingResponse
 from pydantic import BaseModel, Field
 
+from app.db.conversations import load_conversation, upsert_conversation
 from app.roundtable.graph import roundtable_graph
 from app.roundtable.llm import call_llm, stream_llm
 from app.roundtable.prompts import (
@@ -141,6 +142,32 @@ def _format_chat_messages(messages: list[SpeakerChatMessage]) -> str:
     )
 
 
+def _speaker_agent_id(speaker_id: str) -> str:
+    return f"roundtable-speaker:{speaker_id}"
+
+
+def _roundtable_messages(round_item: RoundtableResponse) -> list[dict]:
+    messages: list[dict] = [
+        {"role": "user", "content": round_item.topic},
+    ]
+    if round_item.moderator_plan:
+        messages.append(
+            {"role": "assistant", "content": f"主持人计划：{round_item.moderator_plan}"}
+        )
+    for turn in round_item.turns:
+        messages.append(
+            {
+                "role": "assistant",
+                "content": f"{turn['speaker_name']}（{turn['role']}）：{turn['content']}",
+            }
+        )
+    if round_item.summary:
+        messages.append(
+            {"role": "assistant", "content": f"主持人总结：{round_item.summary}"}
+        )
+    return messages
+
+
 def _stream_text(event: str, data: dict, characters) -> tuple[str, list[str]]:
     content: list[str] = []
     for character in characters:
@@ -170,6 +197,17 @@ def speaker_chat(request: SpeakerChatRequest) -> SpeakerChatResponse:
         )
 
     thread_id = request.thread_id or str(uuid4())
+    persisted_messages: list[SpeakerChatMessage] = []
+    if request.thread_id and not request.messages:
+        record = load_conversation(
+            thread_id=request.thread_id,
+            agent_id=_speaker_agent_id(request.speaker_id),
+        )
+        if record:
+            persisted_messages = [
+                SpeakerChatMessage(**message) for message in record["messages"]
+            ]
+    history_messages = request.messages or persisted_messages
     prompt = f"""你正在和用户进行一对一对话。
 
 重要边界：
@@ -184,7 +222,7 @@ def speaker_chat(request: SpeakerChatRequest) -> SpeakerChatResponse:
 表达风格：{speaker['style']}
 
 最近对话：
-{_format_chat_messages(request.messages)}
+{_format_chat_messages(history_messages)}
 
 用户新问题：
 {request.message}
@@ -206,6 +244,17 @@ def speaker_chat(request: SpeakerChatRequest) -> SpeakerChatResponse:
         prompt,
         fallback,
     )
+    messages = [
+        *[message.model_dump() for message in history_messages],
+        {"role": "user", "content": request.message},
+        {"role": "assistant", "content": answer},
+    ]
+    upsert_conversation(
+        thread_id=thread_id,
+        user_id=request.user_id,
+        agent_id=_speaker_agent_id(speaker["speaker_id"]),
+        messages=messages,
+    )
 
     return SpeakerChatResponse(
         thread_id=thread_id,
@@ -219,13 +268,20 @@ def speaker_chat(request: SpeakerChatRequest) -> SpeakerChatResponse:
 @router.post("/roundtable", response_model=RoundtableResponse)
 def roundtable(request: RoundtableRequest) -> RoundtableResponse:
     state = roundtable_graph.invoke(_initial_state(request))
-    return RoundtableResponse(
+    response = RoundtableResponse(
         thread_id=state["thread_id"],
         topic=state["topic"],
         moderator_plan=state["moderator_plan"],
         turns=state["turns"],
         summary=state["summary"],
     )
+    upsert_conversation(
+        thread_id=response.thread_id,
+        user_id=request.user_id,
+        agent_id="roundtable",
+        messages=_roundtable_messages(response),
+    )
+    return response
 
 
 @router.post("/roundtable/stream")
@@ -339,6 +395,20 @@ def roundtable_stream(request: RoundtableRequest) -> StreamingResponse:
             final_state["summary"] = "".join(summary_parts)
             yield _sse("summary_done", {"summary": final_state["summary"]})
 
+            round_response = RoundtableResponse(
+                thread_id=final_state["thread_id"],
+                topic=final_state["topic"],
+                moderator_plan=final_state["moderator_plan"],
+                turns=final_state["turns"],
+                summary=final_state["summary"],
+            )
+            upsert_conversation(
+                thread_id=round_response.thread_id,
+                user_id=request.user_id,
+                agent_id="roundtable",
+                messages=_roundtable_messages(round_response),
+            )
+
             yield _sse(
                 "done",
                 {
@@ -432,6 +502,16 @@ def targeted_followup_stream(request: TargetedFollowupRequest) -> StreamingRespo
                     },
                 )
 
+            content = "".join(content_parts)
+            upsert_conversation(
+                thread_id=thread_id,
+                user_id=request.user_id,
+                agent_id=f"roundtable-followup:{speaker['speaker_id']}",
+                messages=[
+                    {"role": "user", "content": request.question},
+                    {"role": "assistant", "content": content},
+                ],
+            )
             yield _sse(
                 "target_done",
                 {
@@ -440,7 +520,7 @@ def targeted_followup_stream(request: TargetedFollowupRequest) -> StreamingRespo
                     "speaker_name": speaker["name"],
                     "role": speaker["role"],
                     "question": request.question,
-                    "content": "".join(content_parts),
+                    "content": content,
                 },
             )
         except Exception as error:

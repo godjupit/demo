@@ -69,6 +69,13 @@ export type SpeakerChatResponse = {
   answer: string;
 };
 
+export type ConversationResponse = {
+  thread_id: string;
+  user_id?: string | null;
+  agent_id: string;
+  messages: ChatMessage[];
+};
+
 export type RoundtableStreamEvent =
   | { type: "start"; thread_id: string; topic: string }
   | { type: "plan_start" }
@@ -129,6 +136,21 @@ export async function sendChat(payload: ChatRequest): Promise<ChatResponse> {
 
 export async function getRoundtableSpeakers(): Promise<SpeakerInfo[]> {
   const response = await fetch(`${API_URL}/api/roundtable/speakers`);
+
+  if (!response.ok) {
+    throw new Error(`HTTP ${response.status}`);
+  }
+
+  return response.json();
+}
+
+export async function getConversation(
+  agentId: string,
+  threadId: string
+): Promise<ConversationResponse> {
+  const response = await fetch(
+    `${API_URL}/api/conversations/${encodeURIComponent(agentId)}/${encodeURIComponent(threadId)}`
+  );
 
   if (!response.ok) {
     throw new Error(`HTTP ${response.status}`);

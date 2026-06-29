@@ -12,6 +12,7 @@ import {
 } from "lucide-react";
 import {
   SpeakerInfo,
+  getConversation,
   getRoundtableSpeakers,
   sendSpeakerChat
 } from "@/lib/api";
@@ -26,6 +27,9 @@ type SpeakerConversation = {
   messages: Message[];
 };
 
+const THREAD_STORAGE_KEY = "roundtable-speaker-thread-ids";
+const SELECTED_SPEAKER_STORAGE_KEY = "roundtable-selected-speaker-id";
+
 const mapTiles = Array.from({ length: 16 }, (_, index) => ({
   x: index % 4,
   y: Math.floor(index / 4)
@@ -39,6 +43,29 @@ function latitudeToMapY(latitude: number) {
   const latitudeRadians = (Math.max(Math.min(latitude, 85.0511), -85.0511) * Math.PI) / 180;
   const mercator = Math.log(Math.tan(latitudeRadians) + 1 / Math.cos(latitudeRadians));
   return ((1 - mercator / Math.PI) / 2) * 100;
+}
+
+function speakerAgentId(speakerId: string) {
+  return `roundtable-speaker:${speakerId}`;
+}
+
+function readStoredThreadIds() {
+  try {
+    return JSON.parse(localStorage.getItem(THREAD_STORAGE_KEY) ?? "{}") as Record<
+      string,
+      string
+    >;
+  } catch {
+    return {};
+  }
+}
+
+function storeSpeakerThreadId(speakerId: string, threadId: string) {
+  const current = readStoredThreadIds();
+  localStorage.setItem(
+    THREAD_STORAGE_KEY,
+    JSON.stringify({ ...current, [speakerId]: threadId })
+  );
 }
 
 function introForSpeaker(speaker: SpeakerInfo): Message {
@@ -60,22 +87,57 @@ export default function Home() {
     let isMounted = true;
 
     getRoundtableSpeakers()
-      .then((items) => {
+      .then(async (items) => {
         if (!isMounted) {
           return;
         }
+        const storedThreadIds = readStoredThreadIds();
+        const restoredConversations = await Promise.all(
+          items.map(async (speaker) => {
+            const threadId = storedThreadIds[speaker.speaker_id] ?? null;
+            if (!threadId) {
+              return [
+                speaker.speaker_id,
+                { threadId: null, messages: [introForSpeaker(speaker)] }
+              ] as const;
+            }
+
+            try {
+              const conversation = await getConversation(
+                speakerAgentId(speaker.speaker_id),
+                threadId
+              );
+              return [
+                speaker.speaker_id,
+                {
+                  threadId,
+                  messages: conversation.messages.length
+                    ? conversation.messages
+                    : [introForSpeaker(speaker)]
+                }
+              ] as const;
+            } catch {
+              return [
+                speaker.speaker_id,
+                { threadId, messages: [introForSpeaker(speaker)] }
+              ] as const;
+            }
+          })
+        );
+        if (!isMounted) {
+          return;
+        }
+        const storedSelectedSpeakerId =
+          localStorage.getItem(SELECTED_SPEAKER_STORAGE_KEY) ?? "";
         setSpeakers(items);
-        setSelectedSpeakerId((current) => current || items[0]?.speaker_id || "");
-        setConversations((current) => {
-          const next = { ...current };
-          for (const speaker of items) {
-            next[speaker.speaker_id] = next[speaker.speaker_id] ?? {
-              threadId: null,
-              messages: [introForSpeaker(speaker)]
-            };
-          }
-          return next;
-        });
+        setSelectedSpeakerId(
+          (current) =>
+            current ||
+            (items.some((item) => item.speaker_id === storedSelectedSpeakerId)
+              ? storedSelectedSpeakerId
+              : items[0]?.speaker_id || "")
+        );
+        setConversations(Object.fromEntries(restoredConversations));
       })
       .catch((caught) => {
         if (isMounted) {
@@ -104,6 +166,7 @@ export default function Home() {
 
   function selectSpeaker(speaker: SpeakerInfo) {
     setSelectedSpeakerId(speaker.speaker_id);
+    localStorage.setItem(SELECTED_SPEAKER_STORAGE_KEY, speaker.speaker_id);
     setInput("");
     setError("");
   }
@@ -137,6 +200,7 @@ export default function Home() {
         thread_id: activeConversation.threadId,
         messages: currentMessages
       });
+      storeSpeakerThreadId(selectedSpeaker.speaker_id, response.thread_id);
       setConversations((current) => ({
         ...current,
         [selectedSpeaker.speaker_id]: {

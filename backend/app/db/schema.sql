@@ -50,3 +50,6 @@ CREATE INDEX IF NOT EXISTS chunks_embedding_idx
 
 CREATE INDEX IF NOT EXISTS conversations_thread_id_idx
   ON conversations(thread_id);
+
+CREATE UNIQUE INDEX IF NOT EXISTS conversations_thread_agent_idx
+  ON conversations(thread_id, agent_id);

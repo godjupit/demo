@@ -6,6 +6,7 @@ from pydantic import BaseModel, Field
 
 from app.agents.graph import agent_graph
 from app.agents.state import ChatMessage, Citation
+from app.db.conversations import load_conversation
 
 
 router = APIRouter(tags=["chat"])
@@ -26,6 +27,30 @@ class ChatResponse(BaseModel):
     citations: list[Citation]
     related_nodes: list[str]
     context_sufficient: bool
+
+
+class ConversationResponse(BaseModel):
+    thread_id: str
+    user_id: Optional[str] = None
+    agent_id: str
+    messages: list[ChatMessage]
+
+
+@router.get("/conversations/{agent_id}/{thread_id}", response_model=ConversationResponse)
+def conversation(agent_id: str, thread_id: str) -> ConversationResponse:
+    record = load_conversation(thread_id=thread_id, agent_id=agent_id)
+    if not record:
+        return ConversationResponse(
+            thread_id=thread_id,
+            agent_id=agent_id,
+            messages=[],
+        )
+    return ConversationResponse(
+        thread_id=record["thread_id"],
+        user_id=record["user_id"],
+        agent_id=record["agent_id"],
+        messages=record["messages"],
+    )
 
 
 @router.post("/chat", response_model=ChatResponse)
@@ -55,4 +80,3 @@ def chat(request: ChatRequest) -> ChatResponse:
         related_nodes=state["related_nodes"],
         context_sufficient=state["context_sufficient"],
     )
-
