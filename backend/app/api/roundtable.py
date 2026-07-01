@@ -211,8 +211,8 @@ def speaker_chat(request: SpeakerChatRequest) -> SpeakerChatResponse:
     prompt = f"""你正在和用户进行一对一对话。
 
 重要边界：
-- 你不是历史人物或公众人物本人，而是以其公开思想风格构建的讨论视角。
-- 不要声称拥有该人物的私人记忆、实时经历、真实承诺或未公开观点。
+- 你不是该成员本人，而是基于公开资料与实践标签构建的讨论视角。
+- 不要声称拥有该成员的私人记忆、实时经历、真实承诺或未公开观点。
 - 回答要像单人聊天，不要称自己正在参加圆桌。
 
 你的角色：
@@ -240,7 +240,7 @@ def speaker_chat(request: SpeakerChatRequest) -> SpeakerChatResponse:
         "是否经得起定义、体验和行动的检验。你可以继续追问我其中一个前提。"
     )
     answer = call_llm(
-        f"你以{speaker['name']}的公开思想风格进行一对一对话，但不是本人。",
+        f"你以{speaker['name']}的公开资料和实践风格进行一对一对话，但不是本人。",
         prompt,
         fallback,
     )
@@ -303,9 +303,9 @@ def roundtable_stream(request: RoundtableRequest) -> StreamingResponse:
                 history=_format_history(request.history),
             )
             plan_fallback = (
-                "这个问题的核心张力在于：概念、体验、工程和想象如何互相校正。"
-                "苏格拉底先追问定义，乔布斯判断体验是否成立，马斯克拆解实现路径，"
-                "达芬奇把它放回艺术、自然和跨学科观察中。"
+                "这个问题的核心张力在于：社区、商业、艺术行动、照护和技术实践如何互相校正。"
+                "本轮可以让共益企业先回应可持续经营，再由个体与社群实践者补充地方、身体、"
+                "手作、游戏和公共空间中的具体经验。"
             )
             yield _sse("plan_start", {})
             plan_parts: list[str] = []
@@ -349,7 +349,7 @@ def roundtable_stream(request: RoundtableRequest) -> StreamingResponse:
                 )
                 content_parts: list[str] = []
                 for character in stream_llm(
-                    f"你以{speaker['name']}的公开思想风格参与讨论，但不是本人。",
+                    f"你以{speaker['name']}的公开资料和实践风格参与讨论，但不是本人。",
                     speaker_prompt,
                     speaker_fallback,
                 ):
@@ -379,9 +379,10 @@ def roundtable_stream(request: RoundtableRequest) -> StreamingResponse:
                 turns=_format_turns(turns),
             )
             summary_fallback = (
-                "共识是：这个问题不能只从单一角度判断，需要同时看概念、体验、工程与创造。"
-                "张力在于：追求清晰定义可能会放慢行动，而快速工程化又可能忽略人的感受。"
-                "下一步可以追问：它的核心定义是什么？谁会真正使用它？怎样用最小实验验证？"
+                "共识是：这个问题不能只从单一角度判断，需要同时看社区关系、商业约束、"
+                "艺术方法、照护劳动和技术工具。张力在于：可持续实践需要慢慢建立信任，"
+                "但现实议题又常常要求快速行动。下一步可以追问：谁会被真正影响？"
+                "怎样用小规模共创验证？哪些关系需要被长期维护？"
             )
             yield _sse("summary_start", {})
             summary_parts: list[str] = []
@@ -449,8 +450,8 @@ def targeted_followup_stream(request: TargetedFollowupRequest) -> StreamingRespo
             prompt = f"""你正在继续一个圆桌讨论。用户现在只追问你一个人。
 
 重要边界：
-- 你不是历史人物或公众人物本人，而是以其公开思想风格构建的讨论视角。
-- 不要声称拥有该人物的私人记忆、实时经历、真实承诺或未公开观点。
+- 你不是该成员本人，而是基于公开资料与实践标签构建的讨论视角。
+- 不要声称拥有该成员的私人记忆、实时经历、真实承诺或未公开观点。
 - 回答要直接回应用户追问，不要重新总结整场圆桌。
 
 你的角色：
@@ -489,7 +490,7 @@ def targeted_followup_stream(request: TargetedFollowupRequest) -> StreamingRespo
             )
             content_parts: list[str] = []
             for character in stream_llm(
-                f"你以{speaker['name']}的公开思想风格回答定向追问，但不是本人。",
+                f"你以{speaker['name']}的公开资料和实践风格回答定向追问，但不是本人。",
                 prompt,
                 fallback,
             ):

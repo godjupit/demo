@@ -71,7 +71,7 @@ function storeSpeakerThreadId(speakerId: string, threadId: string) {
 function introForSpeaker(speaker: SpeakerInfo): Message {
   return {
     role: "assistant",
-    content: `你好，我是以${speaker.name}的公开思想风格构建的讨论视角。你可以和我单独聊一个问题，我会从“${speaker.perspective}”切入。`
+    content: `你好，我是基于${speaker.name}公开资料与实践标签构建的讨论视角。你可以和我单独聊一个问题，我会从“${speaker.perspective}”切入。`
   };
 }
 
@@ -236,8 +236,8 @@ export default function Home() {
           <div className="avatar">
             <Globe2 size={32} />
           </div>
-          <h1>圆桌人物地图</h1>
-          <p>选择一位圆桌角色，进入独立的一对一对话。</p>
+          <h1>BCommunity 成员地图</h1>
+          <p>选择一位成员视角，进入独立的一对一对话。</p>
           <div className="speaker-list">
             {speakers.map((speaker) => (
               <button
@@ -264,12 +264,12 @@ export default function Home() {
           <div className="chat-header">
             <div>
               <h2>世界地图</h2>
-              <p>{selectedSpeaker ? `${selectedSpeaker.name} · ${selectedSpeaker.location}` : "正在加载圆桌角色"}</p>
+              <p>{selectedSpeaker ? `${selectedSpeaker.name} · ${selectedSpeaker.location}` : "正在加载 BCommunity 成员"}</p>
             </div>
             <span className="status">MAP</span>
           </div>
 
-          <div className="world-map" aria-label="圆桌人物世界地图">
+          <div className="world-map" aria-label="BCommunity 成员地图">
             <div className="osm-tile-layer">
               {mapTiles.map((tile) => (
                 <div

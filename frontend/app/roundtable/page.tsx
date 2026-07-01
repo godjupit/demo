@@ -11,10 +11,23 @@ import {
 } from "@/lib/api";
 
 const speakerHints = [
-  { id: "socrates", name: "苏格拉底", hint: "追问定义" },
-  { id: "jobs", name: "乔布斯", hint: "产品体验" },
-  { id: "musk", name: "马斯克", hint: "工程路径" },
-  { id: "davinci", name: "达芬奇", hint: "跨学科观察" }
+  { id: "luneurs", name: "Luneurs", hint: "社区品牌" },
+  { id: "arch", name: "Arch", hint: "可持续纺织" },
+  { id: "smart_air", name: "Smart Air", hint: "洁净空气" },
+  { id: "pottery_workshop", name: "乐天陶社", hint: "陶艺社区" },
+  { id: "mumo", name: "MUMO 木墨", hint: "耐用物具" },
+  { id: "rect_repair", name: "修四边形", hint: "城市游戏" },
+  { id: "ge_yulu", name: "葛宇路", hint: "公共空间" },
+  { id: "ergao_ben", name: "二高 & Ben", hint: "南方舞" },
+  { id: "zhao_yiren", name: "赵伊人", hint: "社区互助" },
+  { id: "xiaohei", name: "小黑", hint: "手工版画" },
+  { id: "zhu_jingming", name: "朱璟茗", hint: "精神健康" },
+  { id: "fang_chenchu", name: "晨初", hint: "艺术公教" },
+  { id: "liao_zhili", name: "廖智立", hint: "共居社区" },
+  { id: "xu_yihan", name: "徐艺函", hint: "照护劳动" },
+  { id: "xiuxiu", name: "绣绣故事会", hint: "刺绣叙事" },
+  { id: "spring_changzhou", name: "春潮 Spring", hint: "AI 硬件" },
+  { id: "sailor_club", name: "水手俱乐部", hint: "食物材料游戏" }
 ];
 
 function renderInlineMarkdown(text: string) {
@@ -295,7 +308,7 @@ export default function RoundtablePage() {
             <Sparkles size={32} />
           </div>
           <h1>圆桌讨论</h1>
-          <p>四种思想视角围绕同一话题依次发言，主持人最后收束。</p>
+          <p>BCommunity 成员围绕同一话题依次发言，主持人最后收束。</p>
           <div className="speaker-list">
             {speakerHints.map((speaker) => (
               <div className="speaker-chip" key={speaker.id}>
@@ -311,7 +324,7 @@ export default function RoundtablePage() {
           <div className="chat-header">
             <div>
               <h2>讨论主题</h2>
-              <p>{rounds.length ? "点某位角色定向追问，或开启整桌下一轮" : "输入一个问题，让四个角色从不同角度展开"}</p>
+              <p>{rounds.length ? "点某位成员定向追问，或开启整桌下一轮" : "输入一个问题，让成员们从不同实践角度展开"}</p>
             </div>
             <span className="status">ROUND</span>
           </div>

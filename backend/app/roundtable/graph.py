@@ -33,9 +33,9 @@ def moderator_plan(state: RoundtableState) -> RoundtableState:
         speakers=_format_speakers(),
     )
     fallback = (
-        "这个问题的核心张力在于：概念、体验、工程和想象如何互相校正。"
-        "苏格拉底先追问定义，乔布斯判断体验是否成立，马斯克拆解实现路径，"
-        "达芬奇把它放回艺术、自然和跨学科观察中。"
+        "这个问题的核心张力在于：社区、商业、艺术行动、照护和技术实践如何互相校正。"
+        "本轮可以让共益企业先回应可持续经营，再由个体与社群实践者补充地方、身体、"
+        "手作、游戏和公共空间中的具体经验。"
     )
     plan = call_llm("你是克制、清晰的圆桌主持人。", prompt, fallback)
     return {**state, "moderator_plan": plan}
@@ -60,7 +60,7 @@ def make_speaker_node(speaker_id: str):
             "而要把它放进实际的人、工具、限制和创造关系里检验。"
         )
         content = call_llm(
-            f"你以{speaker['name']}的公开思想风格参与讨论，但不是本人。",
+            f"你以{speaker['name']}的公开资料和实践风格参与讨论，但不是本人。",
             prompt,
             fallback,
         )
@@ -83,9 +83,10 @@ def moderator_summary(state: RoundtableState) -> RoundtableState:
         turns=_format_turns(state["turns"]),
     )
     fallback = (
-        "共识是：这个问题不能只从单一角度判断，需要同时看概念、体验、工程与创造。"
-        "张力在于：追求清晰定义可能会放慢行动，而快速工程化又可能忽略人的感受。"
-        "下一步可以追问：它的核心定义是什么？谁会真正使用它？怎样用最小实验验证？"
+        "共识是：这个问题不能只从单一角度判断，需要同时看社区关系、商业约束、"
+        "艺术方法、照护劳动和技术工具。张力在于：可持续实践需要慢慢建立信任，"
+        "但现实议题又常常要求快速行动。下一步可以追问：谁会被真正影响？"
+        "怎样用小规模共创验证？哪些关系需要被长期维护？"
     )
     summary = call_llm("你是负责收束讨论的主持人。", prompt, fallback)
     return {**state, "summary": summary}
@@ -94,18 +95,19 @@ def moderator_summary(state: RoundtableState) -> RoundtableState:
 def build_roundtable_graph():
     graph = StateGraph(RoundtableState)
     graph.add_node("plan_discussion", moderator_plan)
-    graph.add_node("socrates_reply", make_speaker_node("socrates"))
-    graph.add_node("jobs_reply", make_speaker_node("jobs"))
-    graph.add_node("musk_reply", make_speaker_node("musk"))
-    graph.add_node("davinci_reply", make_speaker_node("davinci"))
+    speaker_nodes = []
+    for speaker in SPEAKERS:
+        node_name = f"{speaker['speaker_id']}_reply"
+        speaker_nodes.append(node_name)
+        graph.add_node(node_name, make_speaker_node(speaker["speaker_id"]))
     graph.add_node("summarize_discussion", moderator_summary)
 
     graph.add_edge(START, "plan_discussion")
-    graph.add_edge("plan_discussion", "socrates_reply")
-    graph.add_edge("socrates_reply", "jobs_reply")
-    graph.add_edge("jobs_reply", "musk_reply")
-    graph.add_edge("musk_reply", "davinci_reply")
-    graph.add_edge("davinci_reply", "summarize_discussion")
+    previous_node = "plan_discussion"
+    for node_name in speaker_nodes:
+        graph.add_edge(previous_node, node_name)
+        previous_node = node_name
+    graph.add_edge(previous_node, "summarize_discussion")
     graph.add_edge("summarize_discussion", END)
 
     return graph.compile()
