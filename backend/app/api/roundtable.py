@@ -7,6 +7,7 @@ from fastapi.responses import StreamingResponse
 from pydantic import BaseModel, Field
 
 from app.db.conversations import load_conversation, upsert_conversation
+from app.knowledge.pgvector_store import retrieve_pgvector
 from app.roundtable.llm import call_llm, stream_llm
 from app.roundtable.prompts import (
     MODERATOR_PLAN_TEMPLATE,
@@ -77,6 +78,7 @@ class SpeakerChatResponse(BaseModel):
     speaker_name: str
     role: str
     answer: str
+    citations: list[dict] = Field(default_factory=list)
 
 
 RoundtableRequest.model_rebuild()
@@ -161,6 +163,40 @@ def _speaker_agent_id(speaker_id: str) -> str:
     return f"roundtable-speaker:{speaker_id}"
 
 
+def _retrieve_speaker_context(speaker_id: str, question: str) -> tuple[str, list[dict]]:
+    try:
+        chunks = retrieve_pgvector(query=question, person_id=speaker_id, limit=6)
+    except Exception:
+        return "暂未从 PostgreSQL/pgvector 检索到资料。", []
+
+    if not chunks:
+        return "暂未从 PostgreSQL/pgvector 检索到资料。", []
+
+    context_blocks = []
+    citations = []
+    for index, chunk in enumerate(chunks, start=1):
+        context_blocks.append(
+            "\n".join(
+                [
+                    f"[{index}] {chunk['title']}",
+                    f"source_id={chunk['source_id']} chunk_id={chunk['chunk_id']} score={chunk['score']:.4f}",
+                    chunk["text"],
+                ]
+            )
+        )
+        citations.append(
+            {
+                "source_id": chunk["source_id"],
+                "chunk_id": chunk["chunk_id"],
+                "title": chunk["title"],
+                "score": chunk["score"],
+                "quote": chunk["text"][:180],
+                "metadata": chunk.get("metadata", {}),
+            }
+        )
+    return "\n\n".join(context_blocks), citations
+
+
 def _roundtable_messages(round_item: RoundtableResponse) -> list[dict]:
     messages: list[dict] = [
         {"role": "user", "content": round_item.topic},
@@ -223,6 +259,10 @@ def speaker_chat(request: SpeakerChatRequest) -> SpeakerChatResponse:
                 SpeakerChatMessage(**message) for message in record["messages"]
             ]
     history_messages = request.messages or persisted_messages
+    rag_context, citations = _retrieve_speaker_context(
+        request.speaker_id,
+        request.message,
+    )
     prompt = f"""你正在和用户进行一对一对话。
 
 重要边界：
@@ -236,6 +276,9 @@ def speaker_chat(request: SpeakerChatRequest) -> SpeakerChatResponse:
 视角：{speaker['perspective']}
 表达风格：{speaker['style']}
 
+从 PostgreSQL + pgvector 检索到的个人资料：
+{rag_context}
+
 最近对话：
 {_format_chat_messages(history_messages)}
 
@@ -245,14 +288,15 @@ def speaker_chat(request: SpeakerChatRequest) -> SpeakerChatResponse:
 请用中文回答，要求：
 - 80 到 180 字
 - 直接回应用户
+- 优先依据检索到的个人资料；如果资料不足，要明确说“资料里没有直接信息”
 - 保持这个角色的思考方式和表达风格
 - 可以留一个自然的追问方向
 - 不要使用 Markdown 加粗符号，例如 **重点**
 """
     fallback = (
-        f"从{speaker['name']}这个讨论视角看，我会先把你的问题放回"
-        f"{speaker['perspective']}。关键不是立刻给出漂亮结论，而是确认这个判断"
-        "是否经得起定义、体验和行动的检验。你可以继续追问我其中一个前提。"
+        f"我先基于已有资料谨慎回答。{speaker['name']} 的公开资料主要指向："
+        f"{speaker['perspective']}。如果你问的是更细的经历、活动细节或具体观点，"
+        "需要继续补充资料或完成 pgvector 导入后再核对。"
     )
     answer = call_llm(
         f"你以{speaker['name']}的公开资料和实践风格进行一对一对话，但不是本人。",
@@ -277,6 +321,7 @@ def speaker_chat(request: SpeakerChatRequest) -> SpeakerChatResponse:
         speaker_name=speaker["name"],
         role=speaker["role"],
         answer=answer,
+        citations=citations,
     )
 
 

@@ -48,6 +48,15 @@ CREATE TABLE IF NOT EXISTS conversations (
 CREATE INDEX IF NOT EXISTS chunks_embedding_idx
   ON chunks USING ivfflat (embedding vector_cosine_ops);
 
+CREATE INDEX IF NOT EXISTS sources_person_id_idx
+  ON sources(person_id);
+
+CREATE INDEX IF NOT EXISTS chunks_person_id_idx
+  ON chunks(person_id);
+
+CREATE INDEX IF NOT EXISTS chunks_metadata_gin_idx
+  ON chunks USING gin (metadata);
+
 CREATE INDEX IF NOT EXISTS conversations_thread_id_idx
   ON conversations(thread_id);
 

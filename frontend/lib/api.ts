@@ -67,6 +67,14 @@ export type SpeakerChatResponse = {
   speaker_name: string;
   role: string;
   answer: string;
+  citations?: Array<{
+    source_id: string;
+    chunk_id: string;
+    title: string;
+    score: number;
+    quote: string;
+    metadata: Record<string, unknown>;
+  }>;
 };
 
 export type ConversationResponse = {

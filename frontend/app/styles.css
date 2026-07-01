@@ -760,7 +760,12 @@ h1 {
   color: var(--warm);
 }
 
-.message p {
+.message-body {
+  min-width: 0;
+}
+
+.message p,
+.message-body p {
   border: 1px solid var(--line);
   border-radius: 8px;
   padding: 12px 14px;
@@ -769,10 +774,28 @@ h1 {
   background: #fbfaf7;
 }
 
-.message.user p {
+.message.user p,
+.message.user .message-body p {
   background: var(--accent);
   border-color: var(--accent);
   color: #ffffff;
+}
+
+.message-citations {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 6px;
+}
+
+.message-citations span {
+  border: 1px solid #d6e4df;
+  border-radius: 999px;
+  padding: 4px 8px;
+  background: #f4fbf8;
+  color: var(--accent-strong);
+  font-size: 11px;
+  font-weight: 800;
 }
 
 .composer {

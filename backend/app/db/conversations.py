@@ -5,6 +5,7 @@ from psycopg.rows import dict_row
 from psycopg.types.json import Jsonb
 
 from app.core.settings import settings
+from app.db.connection import db_connection
 
 
 def _connect():
@@ -12,7 +13,7 @@ def _connect():
 
 
 def load_conversation(thread_id: str, agent_id: str) -> dict[str, Any] | None:
-    with _connect() as connection:
+    with db_connection() as connection:
         with connection.cursor() as cursor:
             cursor.execute(
                 """
@@ -34,7 +35,7 @@ def upsert_conversation(
     messages: list[dict[str, Any]],
     user_id: str | None = None,
 ) -> None:
-    with _connect() as connection:
+    with db_connection() as connection:
         with connection.cursor() as cursor:
             cursor.execute(
                 """

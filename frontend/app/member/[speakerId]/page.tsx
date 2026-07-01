@@ -15,6 +15,13 @@ import {
 type Message = {
   role: "user" | "assistant";
   content: string;
+  citations?: Array<{
+    source_id: string;
+    chunk_id: string;
+    title: string;
+    score: number;
+    quote: string;
+  }>;
 };
 
 const THREAD_STORAGE_KEY = "roundtable-speaker-thread-ids";
@@ -137,7 +144,17 @@ export default function MemberPage() {
       storeSpeakerThreadId(speaker.speaker_id, response.thread_id);
       setMessages((current) => [
         ...current,
-        { role: "assistant", content: response.answer }
+        {
+          role: "assistant",
+          content: response.answer,
+          citations: response.citations?.map((citation) => ({
+            source_id: citation.source_id,
+            chunk_id: citation.chunk_id,
+            title: citation.title,
+            score: citation.score,
+            quote: citation.quote
+          }))
+        }
       ]);
     } catch (caught) {
       const message = caught instanceof Error ? caught.message : "请求失败";
@@ -199,7 +216,18 @@ export default function MemberPage() {
               <div className="message-icon">
                 {message.role === "assistant" ? <Bot size={18} /> : <UserRound size={18} />}
               </div>
-              <p>{message.content}</p>
+              <div className="message-body">
+                <p>{message.content}</p>
+                {message.citations?.length ? (
+                  <div className="message-citations">
+                    {message.citations.slice(0, 3).map((citation) => (
+                      <span key={citation.chunk_id}>
+                        {citation.title} · {citation.score.toFixed(2)}
+                      </span>
+                    ))}
+                  </div>
+                ) : null}
+              </div>
             </div>
           ))}
           {isLoading ? (

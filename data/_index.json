@@ -1,0 +1,110 @@
+[
+  {
+    "person_id": "luneurs",
+    "name": "Luneurs",
+    "file_count": 2,
+    "dir": "data/luneurs"
+  },
+  {
+    "person_id": "arch",
+    "name": "Arch（美璟新材料）",
+    "file_count": 2,
+    "dir": "data/arch"
+  },
+  {
+    "person_id": "smart_air",
+    "name": "Smart Air / 聪明空气",
+    "file_count": 2,
+    "dir": "data/smart_air"
+  },
+  {
+    "person_id": "pottery_workshop",
+    "name": "乐天陶社 / Pottery Workshop",
+    "file_count": 2,
+    "dir": "data/pottery_workshop"
+  },
+  {
+    "person_id": "mumo",
+    "name": "MUMO 木墨",
+    "file_count": 2,
+    "dir": "data/mumo"
+  },
+  {
+    "person_id": "rect_repair",
+    "name": "阿久、天琦 / 修四边形",
+    "file_count": 39,
+    "dir": "data/rect_repair"
+  },
+  {
+    "person_id": "ge_yulu",
+    "name": "葛宇路",
+    "file_count": 0,
+    "dir": "data/ge_yulu"
+  },
+  {
+    "person_id": "ergao_ben",
+    "name": "二高 & Ben / 二高表演",
+    "file_count": 1,
+    "dir": "data/ergao_ben"
+  },
+  {
+    "person_id": "zhao_yiren",
+    "name": "赵伊人 / 定海桥互助社",
+    "file_count": 0,
+    "dir": "data/zhao_yiren"
+  },
+  {
+    "person_id": "xiaohei",
+    "name": "小黑 / 漫画与手工艺",
+    "file_count": 0,
+    "dir": "data/xiaohei"
+  },
+  {
+    "person_id": "zhu_jingming",
+    "name": "朱璟茗",
+    "file_count": 0,
+    "dir": "data/zhu_jingming"
+  },
+  {
+    "person_id": "fang_chenchu",
+    "name": "晨初 / 假杂志、boPOmofo",
+    "file_count": 1,
+    "dir": "data/fang_chenchu"
+  },
+  {
+    "person_id": "liao_zhili",
+    "name": "廖智立 / Dweller、普罗托邦",
+    "file_count": 0,
+    "dir": "data/liao_zhili"
+  },
+  {
+    "person_id": "xu_yihan",
+    "name": "徐艺函 / 起风了社区",
+    "file_count": 0,
+    "dir": "data/xu_yihan"
+  },
+  {
+    "person_id": "xiuxiu",
+    "name": "Ruifen & 不子 / 绣绣故事会",
+    "file_count": 1,
+    "dir": "data/xiuxiu"
+  },
+  {
+    "person_id": "buzi",
+    "name": "不子 / 绣绣故事会",
+    "file_count": 1,
+    "dir": "data/buzi"
+  },
+  {
+    "person_id": "spring_changzhou",
+    "name": "春潮 Spring / 长洲岛瑶寨",
+    "file_count": 1,
+    "dir": "data/spring_changzhou"
+  },
+  {
+    "person_id": "sailor_club",
+    "name": "水手俱乐部",
+    "file_count": 0,
+    "dir": "data/sailor_club"
+  }
+]

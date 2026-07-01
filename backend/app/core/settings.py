@@ -7,6 +7,9 @@ class Settings(BaseSettings):
     openai_api_key: str = ""
     openai_url: str = ""
     openai_chat_model: str = "gpt-4o-mini"
+    openai_embedding_api_key: str = ""
+    openai_embedding_url: str = ""
+    openai_embedding_model: str = "text-embedding-3-small"
     database_url: str = "postgresql://community:community@localhost:5432/community_agents"
     frontend_origin: str = "http://localhost:3000"
 

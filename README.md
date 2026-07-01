@@ -67,11 +67,90 @@ cp .env.example .env
 
 后端环境变量说明如下：
 
-- `OPENAI_API_KEY`：OpenAI 或兼容模型的 API Key。
-- `OPENAI_URL`：可选，自定义模型服务地址。
+- `OPENAI_API_KEY`：聊天模型 API Key。
+- `OPENAI_URL`：可选，聊天模型服务地址。
 - `OPENAI_CHAT_MODEL`：默认聊天模型名，当前示例为 `gpt-4o-mini`。
+- `OPENAI_EMBEDDING_API_KEY`：可选，Embedding 模型 API Key；不填时回退到 `OPENAI_API_KEY`。
+- `OPENAI_EMBEDDING_URL`：可选，Embedding 模型服务地址；不填时回退到 `OPENAI_URL`。
+- `OPENAI_EMBEDDING_MODEL`：Embedding 模型名，默认 `text-embedding-3-small`。
 - `DATABASE_URL`：PostgreSQL 连接地址，默认 `postgresql://community:community@localhost:5432/community_agents`。
 - `FRONTEND_ORIGIN`：前端访问源，用于 CORS 配置。
+
+## PostgreSQL + pgvector 知识库
+
+当前版本支持把 `data/<person_id>/` 下的原始资料文件导入 PostgreSQL + pgvector，不再依赖 `information/RAG整理/01_BCommunity_RAG_合并全文.md` 或 JSONL 汇总文件：
+
+- `sources`：每个原始文件一条来源记录。
+- `chunks`：按原始文件切块，并保存 OpenAI embedding。
+- 个人主页一对一聊天会按 `speaker_id` 过滤检索，只使用该成员自己的资料片段。
+- 每个 chunk 的 metadata 会保留 `user_id`、`person_id`、`source_file`、`page`、`chunk_index` 等字段。
+- 调试接口：
+  - `GET /api/rag/people`：查看已导入的人和 chunk 数量。
+  - `POST /api/rag/search`：直接测试向量检索。
+
+资料目录建议保持这个形状：
+
+```text
+data/
+├─ rect_repair/
+│  ├─ EP19  逐字稿.md
+│  ├─ 官网.md
+│  ├─ 修四边形公众号/
+│  │  └─ 茶水间_2_回顾.md
+│  └─ _manifest.json
+├─ fang_chenchu/
+│  ├─ 晨初 & 假杂志检索.md
+│  └─ _manifest.json
+└─ luneurs/
+   ├─ Luneurs_另类成长.md
+   └─ _manifest.json
+```
+
+`_manifest.json` 用来标记这个文件夹属于谁；真正入库的是同目录下的原始 `.md`、`.txt`、`.pdf`、`.docx` 文件。PDF 会按页入库，所以 chunk metadata 里可以保留页码。
+
+本地启动 pgvector：
+
+```bash
+docker compose up -d postgres
+```
+
+初始化数据库 schema：
+
+```bash
+cd backend
+PYTHONPATH=. python scripts/init_db.py
+```
+
+配置 `backend/.env`，至少需要：
+
+```bash
+OPENAI_API_KEY=你的 key
+OPENAI_URL=https://你的聊天模型地址/v1
+OPENAI_CHAT_MODEL=gpt-4o-mini
+OPENAI_EMBEDDING_API_KEY=你的 embedding key
+OPENAI_EMBEDDING_URL=https://你的 embedding 模型地址/v1
+OPENAI_EMBEDDING_MODEL=text-embedding-3-small
+DATABASE_URL=postgresql://community:community@localhost:5432/community_agents
+```
+
+导入 BCommunity 个人 RAG：
+
+```bash
+cd backend
+PYTHONPATH=. python scripts/ingest_bcommunity_rag.py
+```
+
+验证导入结果：
+
+```bash
+curl http://localhost:8000/api/rag/people
+
+curl -X POST http://localhost:8000/api/rag/search \
+  -H "Content-Type: application/json" \
+  -d '{"person_id":"rect_repair","query":"修四边形为什么关注城市游戏？","limit":3}'
+```
+
+然后打开前端个人主页，例如 `/member/rect_repair`，提问时会自动从 PostgreSQL + pgvector 检索该成员资料。
 
 ## PostgreSQL 记忆持久化
 
