@@ -39,10 +39,32 @@ def _iter_source_files(person_dir: Path) -> list[Path]:
     return files
 
 
+def _clean_text(text: str) -> str:
+    text = re.sub(r"\A---\s.*?\s---", "", text, flags=re.DOTALL)
+    text = re.sub(r"!\[[^\]]*]\([^)]*\)", "", text)
+    text = re.sub(r"<img\b[^>]*>", "", text, flags=re.IGNORECASE)
+    text = re.sub(r"data:image/[^)\s]+", "", text)
+    text = re.sub(r"https?://\S+", "", text)
+    text = re.sub(r"\[([^\]]+)]\([^)]*\)", r"\1", text)
+
+    cleaned_lines: list[str] = []
+    for line in text.splitlines():
+        stripped = line.strip()
+        if not stripped:
+            continue
+        if stripped.startswith(("![](", "![", "data:image")):
+            continue
+        if stripped in {"修四边形", "[[rect*]]repair"}:
+            continue
+        cleaned_lines.append(stripped)
+
+    return "\n".join(cleaned_lines)
+
+
 def _extract_documents(path: Path) -> list[tuple[str, int | None]]:
     extension = path.suffix.lower()
     if extension in {".md", ".txt"}:
-        return [(path.read_text(encoding="utf-8", errors="replace"), None)]
+        return [(_clean_text(path.read_text(encoding="utf-8", errors="replace")), None)]
 
     if extension == ".pdf":
         try:
@@ -53,7 +75,7 @@ def _extract_documents(path: Path) -> list[tuple[str, int | None]]:
         reader = PdfReader(str(path))
         pages = []
         for index, page in enumerate(reader.pages, start=1):
-            pages.append((page.extract_text() or "", index))
+            pages.append((_clean_text(page.extract_text() or ""), index))
         return pages
 
     if extension == ".docx":
@@ -64,7 +86,7 @@ def _extract_documents(path: Path) -> list[tuple[str, int | None]]:
 
         document = Document(str(path))
         text = "\n".join(paragraph.text for paragraph in document.paragraphs)
-        return [(text, None)]
+        return [(_clean_text(text), None)]
 
     return []
 
