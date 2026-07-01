@@ -2,7 +2,7 @@ from app.core.settings import settings
 
 
 def embedding_dimension() -> int:
-    return 1536
+    return settings.openai_embedding_dimensions
 
 
 def embed_text(text: str) -> list[float]:

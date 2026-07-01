@@ -1,4 +1,6 @@
-from typing import Any, Optional, TypedDict
+from typing import Any, Optional
+
+from typing_extensions import TypedDict
 
 
 class ChatMessage(TypedDict):
@@ -44,4 +46,3 @@ class AgentState(TypedDict):
     answer: Optional[str]
     citations: list[Citation]
     related_nodes: list[str]
-

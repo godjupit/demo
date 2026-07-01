@@ -30,7 +30,7 @@ CREATE TABLE IF NOT EXISTS chunks (
   source_id TEXT NOT NULL REFERENCES sources(id) ON DELETE CASCADE,
   person_id TEXT,
   text TEXT NOT NULL,
-  embedding vector(1536),
+  embedding vector(2048),
   metadata JSONB NOT NULL DEFAULT '{}'::jsonb,
   created_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
@@ -44,9 +44,6 @@ CREATE TABLE IF NOT EXISTS conversations (
   created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
   updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
-
-CREATE INDEX IF NOT EXISTS chunks_embedding_idx
-  ON chunks USING ivfflat (embedding vector_cosine_ops);
 
 CREATE INDEX IF NOT EXISTS sources_person_id_idx
   ON sources(person_id);

@@ -73,6 +73,7 @@ cp .env.example .env
 - `OPENAI_EMBEDDING_API_KEY`：可选，Embedding 模型 API Key；不填时回退到 `OPENAI_API_KEY`。
 - `OPENAI_EMBEDDING_URL`：可选，Embedding 模型服务地址；不填时回退到 `OPENAI_URL`。
 - `OPENAI_EMBEDDING_MODEL`：Embedding 模型名，默认 `text-embedding-3-small`。
+- `OPENAI_EMBEDDING_DIMENSIONS`：Embedding 向量维度；智谱 `Embedding-3` 为 `2048`。
 - `DATABASE_URL`：PostgreSQL 连接地址，默认 `postgresql://community:community@localhost:5432/community_agents`。
 - `FRONTEND_ORIGIN`：前端访问源，用于 CORS 配置。
 
@@ -130,6 +131,7 @@ OPENAI_CHAT_MODEL=gpt-4o-mini
 OPENAI_EMBEDDING_API_KEY=你的 embedding key
 OPENAI_EMBEDDING_URL=https://你的 embedding 模型地址/v1
 OPENAI_EMBEDDING_MODEL=text-embedding-3-small
+OPENAI_EMBEDDING_DIMENSIONS=2048
 DATABASE_URL=postgresql://community:community@localhost:5432/community_agents
 ```
 
