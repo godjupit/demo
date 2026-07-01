@@ -180,13 +180,16 @@ export async function sendSpeakerChat(payload: {
   return response.json();
 }
 
-export async function runRoundtable(topic: string): Promise<RoundtableResponse> {
+export async function runRoundtable(
+  topic: string,
+  speakerIds: string[]
+): Promise<RoundtableResponse> {
   const response = await fetch(`${API_URL}/api/roundtable`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json"
     },
-    body: JSON.stringify({ topic })
+    body: JSON.stringify({ topic, speaker_ids: speakerIds })
   });
 
   if (!response.ok) {
@@ -198,6 +201,7 @@ export async function runRoundtable(topic: string): Promise<RoundtableResponse> 
 
 export async function streamRoundtable(
   topic: string,
+  speakerIds: string[],
   history: RoundtableResponse[],
   onEvent: (event: RoundtableStreamEvent) => void
 ): Promise<void> {
@@ -207,7 +211,7 @@ export async function streamRoundtable(
       "Content-Type": "application/json",
       Accept: "text/event-stream"
     },
-    body: JSON.stringify({ topic, history })
+    body: JSON.stringify({ topic, history, speaker_ids: speakerIds })
   });
 
   if (!response.ok) {

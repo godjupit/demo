@@ -2,12 +2,11 @@ import json
 from typing import Optional
 from uuid import uuid4
 
-from fastapi import APIRouter
+from fastapi import APIRouter, HTTPException
 from fastapi.responses import StreamingResponse
 from pydantic import BaseModel, Field
 
 from app.db.conversations import load_conversation, upsert_conversation
-from app.roundtable.graph import roundtable_graph
 from app.roundtable.llm import call_llm, stream_llm
 from app.roundtable.prompts import (
     MODERATOR_PLAN_TEMPLATE,
@@ -26,6 +25,7 @@ class RoundtableRequest(BaseModel):
     thread_id: Optional[str] = None
     user_id: Optional[str] = None
     history: list["RoundtableResponse"] = Field(default_factory=list)
+    speaker_ids: list[str] = Field(default_factory=list)
 
 
 class TargetedFollowupRequest(BaseModel):
@@ -98,10 +98,25 @@ def _sse(event: str, data: dict) -> str:
     return f"event: {event}\ndata: {json.dumps(data, ensure_ascii=False)}\n\n"
 
 
-def _format_speakers() -> str:
+def _select_roundtable_speakers(speaker_ids: list[str]) -> list[dict]:
+    selected_ids = speaker_ids or [speaker["speaker_id"] for speaker in SPEAKERS[:3]]
+    unique_ids = list(dict.fromkeys(selected_ids))
+    if len(unique_ids) != 3:
+        raise ValueError("圆桌会议需要且只能选择 3 位成员。")
+
+    speakers_by_id = {speaker["speaker_id"]: speaker for speaker in SPEAKERS}
+    missing_ids = [speaker_id for speaker_id in unique_ids if speaker_id not in speakers_by_id]
+    if missing_ids:
+        raise ValueError(f"未知成员：{', '.join(missing_ids)}")
+
+    return [speakers_by_id[speaker_id] for speaker_id in unique_ids]
+
+
+def _format_speakers(speakers: list[dict] | None = None) -> str:
+    selected_speakers = speakers or SPEAKERS
     return "\n".join(
         f"- {speaker['name']}：{speaker['role']}，{speaker['perspective']}"
-        for speaker in SPEAKERS
+        for speaker in selected_speakers
     )
 
 
@@ -267,7 +282,68 @@ def speaker_chat(request: SpeakerChatRequest) -> SpeakerChatResponse:
 
 @router.post("/roundtable", response_model=RoundtableResponse)
 def roundtable(request: RoundtableRequest) -> RoundtableResponse:
-    state = roundtable_graph.invoke(_initial_state(request))
+    try:
+        selected_speakers = _select_roundtable_speakers(request.speaker_ids)
+    except ValueError as error:
+        raise HTTPException(status_code=400, detail=str(error)) from error
+
+    state = _initial_state(request)
+    plan_prompt = MODERATOR_PLAN_TEMPLATE.format(
+        topic=state["topic"],
+        speakers=_format_speakers(selected_speakers),
+        history=_format_history(request.history),
+    )
+    plan_fallback = (
+        "这个问题的核心张力在于：三位成员各自代表的实践经验如何互相校正。"
+        "本轮可以先让他们分别从自身实践切入，再比较社区关系、商业约束、"
+        "艺术行动、照护劳动或技术工具之间的差异。"
+    )
+    state["moderator_plan"] = call_llm("你是克制、清晰的圆桌主持人。", plan_prompt, plan_fallback)
+
+    turns: list[RoundtableTurn] = []
+    for speaker in selected_speakers:
+        speaker_prompt = SPEAKER_TEMPLATE.format(
+            name=speaker["name"],
+            role=speaker["role"],
+            perspective=speaker["perspective"],
+            style=speaker["style"],
+            topic=state["topic"],
+            history=_format_history(request.history),
+            moderator_plan=state["moderator_plan"],
+            previous_turns=_format_turns(turns),
+        )
+        speaker_fallback = (
+            f"从{speaker['name']}的视角看，问题“{state['topic']}”需要先回到"
+            f"{speaker['perspective']} 这个层面。我的判断是：不要急着接受表面答案，"
+            "而要把它放进实际的人、工具、限制和创造关系里检验。"
+        )
+        turns.append(
+            {
+                "speaker_id": speaker["speaker_id"],
+                "speaker_name": speaker["name"],
+                "role": speaker["role"],
+                "content": call_llm(
+                    f"你以{speaker['name']}的公开资料和实践风格参与讨论，但不是本人。",
+                    speaker_prompt,
+                    speaker_fallback,
+                ),
+            }
+        )
+    state["turns"] = turns
+
+    summary_prompt = SUMMARY_TEMPLATE.format(
+        topic=state["topic"],
+        history=_format_history(request.history),
+        moderator_plan=state["moderator_plan"],
+        turns=_format_turns(turns),
+    )
+    summary_fallback = (
+        "共识是：这个问题需要同时放进三位成员的具体实践里判断。"
+        "张力在于：不同实践对行动速度、关系维护和资源约束的理解并不相同。"
+        "下一步可以追问：谁会被真正影响？怎样用小规模共创验证？哪些关系需要长期维护？"
+    )
+    state["summary"] = call_llm("你是负责收束讨论的主持人。", summary_prompt, summary_fallback)
+
     response = RoundtableResponse(
         thread_id=state["thread_id"],
         topic=state["topic"],
@@ -297,15 +373,16 @@ def roundtable_stream(request: RoundtableRequest) -> StreamingResponse:
         )
 
         try:
+            selected_speakers = _select_roundtable_speakers(request.speaker_ids)
             plan_prompt = MODERATOR_PLAN_TEMPLATE.format(
                 topic=final_state["topic"],
-                speakers=_format_speakers(),
+                speakers=_format_speakers(selected_speakers),
                 history=_format_history(request.history),
             )
             plan_fallback = (
-                "这个问题的核心张力在于：社区、商业、艺术行动、照护和技术实践如何互相校正。"
-                "本轮可以让共益企业先回应可持续经营，再由个体与社群实践者补充地方、身体、"
-                "手作、游戏和公共空间中的具体经验。"
+                "这个问题的核心张力在于：三位成员各自代表的实践经验如何互相校正。"
+                "本轮可以先让他们分别从自身实践切入，再比较社区关系、商业约束、"
+                "艺术行动、照护劳动或技术工具之间的差异。"
             )
             yield _sse("plan_start", {})
             plan_parts: list[str] = []
@@ -323,7 +400,7 @@ def roundtable_stream(request: RoundtableRequest) -> StreamingResponse:
             )
 
             turns: list[RoundtableTurn] = []
-            for speaker in SPEAKERS:
+            for speaker in selected_speakers:
                 yield _sse(
                     "turn_start",
                     {
@@ -379,10 +456,9 @@ def roundtable_stream(request: RoundtableRequest) -> StreamingResponse:
                 turns=_format_turns(turns),
             )
             summary_fallback = (
-                "共识是：这个问题不能只从单一角度判断，需要同时看社区关系、商业约束、"
-                "艺术方法、照护劳动和技术工具。张力在于：可持续实践需要慢慢建立信任，"
-                "但现实议题又常常要求快速行动。下一步可以追问：谁会被真正影响？"
-                "怎样用小规模共创验证？哪些关系需要被长期维护？"
+                "共识是：这个问题需要同时放进三位成员的具体实践里判断。"
+                "张力在于：不同实践对行动速度、关系维护和资源约束的理解并不相同。"
+                "下一步可以追问：谁会被真正影响？怎样用小规模共创验证？哪些关系需要长期维护？"
             )
             yield _sse("summary_start", {})
             summary_parts: list[str] = []

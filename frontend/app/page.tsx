@@ -1,147 +1,63 @@
 "use client";
 
-import { FormEvent, useEffect, useMemo, useState } from "react";
 import Link from "next/link";
-import {
-  Bot,
-  Globe2,
-  MapPin,
-  Send,
-  UserRound,
-  UsersRound
-} from "lucide-react";
-import {
-  SpeakerInfo,
-  getConversation,
-  getRoundtableSpeakers,
-  sendSpeakerChat
-} from "@/lib/api";
+import { useEffect, useMemo, useState } from "react";
+import { Check, Plus, Sparkles, UsersRound, X } from "lucide-react";
+import { SpeakerAvatar } from "@/components/SpeakerAvatar";
+import { SpeakerInfo, getRoundtableSpeakers } from "@/lib/api";
 
-type Message = {
-  role: "user" | "assistant";
-  content: string;
-};
+const portraitPositions = [
+  { left: 12, top: 18 },
+  { left: 31, top: 12 },
+  { left: 52, top: 18 },
+  { left: 74, top: 11 },
+  { left: 88, top: 26 },
+  { left: 20, top: 37 },
+  { left: 43, top: 34 },
+  { left: 64, top: 39 },
+  { left: 82, top: 49 },
+  { left: 10, top: 60 },
+  { left: 30, top: 63 },
+  { left: 51, top: 58 },
+  { left: 70, top: 68 },
+  { left: 90, top: 72 },
+  { left: 19, top: 82 },
+  { left: 45, top: 83 },
+  { left: 66, top: 87 },
+  { left: 83, top: 88 }
+];
 
-type SpeakerConversation = {
-  threadId: string | null;
-  messages: Message[];
-};
-
-const THREAD_STORAGE_KEY = "roundtable-speaker-thread-ids";
-const SELECTED_SPEAKER_STORAGE_KEY = "roundtable-selected-speaker-id";
-
-const mapTiles = Array.from({ length: 16 }, (_, index) => ({
-  x: index % 4,
-  y: Math.floor(index / 4)
-}));
-
-function longitudeToMapX(longitude: number) {
-  return ((longitude + 180) / 360) * 100;
+function clampPercent(value: number) {
+  return Math.min(94, Math.max(4, value));
 }
 
-function latitudeToMapY(latitude: number) {
-  const latitudeRadians = (Math.max(Math.min(latitude, 85.0511), -85.0511) * Math.PI) / 180;
-  const mercator = Math.log(Math.tan(latitudeRadians) + 1 / Math.cos(latitudeRadians));
-  return ((1 - mercator / Math.PI) / 2) * 100;
-}
-
-function speakerAgentId(speakerId: string) {
-  return `roundtable-speaker:${speakerId}`;
-}
-
-function readStoredThreadIds() {
-  try {
-    return JSON.parse(localStorage.getItem(THREAD_STORAGE_KEY) ?? "{}") as Record<
-      string,
-      string
-    >;
-  } catch {
-    return {};
-  }
-}
-
-function storeSpeakerThreadId(speakerId: string, threadId: string) {
-  const current = readStoredThreadIds();
-  localStorage.setItem(
-    THREAD_STORAGE_KEY,
-    JSON.stringify({ ...current, [speakerId]: threadId })
-  );
-}
-
-function introForSpeaker(speaker: SpeakerInfo): Message {
+function portraitPosition(index: number) {
+  const position = portraitPositions[index % portraitPositions.length];
+  const repeat = Math.floor(index / portraitPositions.length);
   return {
-    role: "assistant",
-    content: `你好，我是基于${speaker.name}公开资料与实践标签构建的讨论视角。你可以和我单独聊一个问题，我会从“${speaker.perspective}”切入。`
+    left: `${clampPercent(position.left + repeat * 2.2)}%`,
+    top: `${clampPercent(position.top + repeat * 1.8)}%`
   };
 }
 
 export default function Home() {
   const [speakers, setSpeakers] = useState<SpeakerInfo[]>([]);
-  const [selectedSpeakerId, setSelectedSpeakerId] = useState("");
-  const [conversations, setConversations] = useState<Record<string, SpeakerConversation>>({});
-  const [input, setInput] = useState("");
+  const [selectedSpeakerIds, setSelectedSpeakerIds] = useState<string[]>([]);
   const [error, setError] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     let isMounted = true;
 
     getRoundtableSpeakers()
-      .then(async (items) => {
+      .then((items) => {
         if (!isMounted) {
           return;
         }
-        const storedThreadIds = readStoredThreadIds();
-        const restoredConversations = await Promise.all(
-          items.map(async (speaker) => {
-            const threadId = storedThreadIds[speaker.speaker_id] ?? null;
-            if (!threadId) {
-              return [
-                speaker.speaker_id,
-                { threadId: null, messages: [introForSpeaker(speaker)] }
-              ] as const;
-            }
-
-            try {
-              const conversation = await getConversation(
-                speakerAgentId(speaker.speaker_id),
-                threadId
-              );
-              return [
-                speaker.speaker_id,
-                {
-                  threadId,
-                  messages: conversation.messages.length
-                    ? conversation.messages
-                    : [introForSpeaker(speaker)]
-                }
-              ] as const;
-            } catch {
-              return [
-                speaker.speaker_id,
-                { threadId, messages: [introForSpeaker(speaker)] }
-              ] as const;
-            }
-          })
-        );
-        if (!isMounted) {
-          return;
-        }
-        const storedSelectedSpeakerId =
-          localStorage.getItem(SELECTED_SPEAKER_STORAGE_KEY) ?? "";
         setSpeakers(items);
-        setSelectedSpeakerId(
-          (current) =>
-            current ||
-            (items.some((item) => item.speaker_id === storedSelectedSpeakerId)
-              ? storedSelectedSpeakerId
-              : items[0]?.speaker_id || "")
-        );
-        setConversations(Object.fromEntries(restoredConversations));
       })
       .catch((caught) => {
         if (isMounted) {
-          setError(caught instanceof Error ? caught.message : "人物加载失败");
+          setError(caught instanceof Error ? caught.message : "成员加载失败");
         }
       });
 
@@ -150,223 +66,151 @@ export default function Home() {
     };
   }, []);
 
-  const selectedSpeaker = useMemo(
-    () => speakers.find((speaker) => speaker.speaker_id === selectedSpeakerId) ?? null,
-    [speakers, selectedSpeakerId]
+  const selectedSpeakers = useMemo(
+    () =>
+      selectedSpeakerIds
+        .map((speakerId) => speakers.find((speaker) => speaker.speaker_id === speakerId))
+        .filter((speaker): speaker is SpeakerInfo => Boolean(speaker)),
+    [speakers, selectedSpeakerIds]
   );
 
-  const activeConversation = selectedSpeakerId
-    ? conversations[selectedSpeakerId]
-    : undefined;
-  const messages = activeConversation?.messages ?? [];
-  const canSend = useMemo(
-    () => Boolean(selectedSpeaker) && input.trim().length > 0 && !isLoading,
-    [input, isLoading, selectedSpeaker]
-  );
+  const roundtableHref = useMemo(() => {
+    const params = new URLSearchParams();
+    params.set("speakers", selectedSpeakerIds.join(","));
+    return `/roundtable?${params.toString()}`;
+  }, [selectedSpeakerIds]);
 
-  function selectSpeaker(speaker: SpeakerInfo) {
-    setSelectedSpeakerId(speaker.speaker_id);
-    localStorage.setItem(SELECTED_SPEAKER_STORAGE_KEY, speaker.speaker_id);
-    setInput("");
-    setError("");
-  }
-
-  async function onSubmit(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    if (!canSend || !selectedSpeaker || !activeConversation) {
-      return;
-    }
-
-    const userMessage = input.trim();
-    const currentMessages = activeConversation.messages;
-    setInput("");
-    setIsLoading(true);
-    setError("");
-    setConversations((current) => ({
-      ...current,
-      [selectedSpeaker.speaker_id]: {
-        ...current[selectedSpeaker.speaker_id],
-        messages: [
-          ...(current[selectedSpeaker.speaker_id]?.messages ?? []),
-          { role: "user", content: userMessage }
-        ]
+  function toggleRoundtableSpeaker(speakerId: string) {
+    setSelectedSpeakerIds((current) => {
+      if (current.includes(speakerId)) {
+        return current.filter((id) => id !== speakerId);
       }
-    }));
-
-    try {
-      const response = await sendSpeakerChat({
-        message: userMessage,
-        speaker_id: selectedSpeaker.speaker_id,
-        thread_id: activeConversation.threadId,
-        messages: currentMessages
-      });
-      storeSpeakerThreadId(selectedSpeaker.speaker_id, response.thread_id);
-      setConversations((current) => ({
-        ...current,
-        [selectedSpeaker.speaker_id]: {
-          threadId: response.thread_id,
-          messages: [
-            ...(current[selectedSpeaker.speaker_id]?.messages ?? []),
-            { role: "assistant", content: response.answer }
-          ]
-        }
-      }));
-    } catch (caught) {
-      const message = caught instanceof Error ? caught.message : "请求失败";
-      setError(message);
-      setConversations((current) => ({
-        ...current,
-        [selectedSpeaker.speaker_id]: {
-          ...current[selectedSpeaker.speaker_id],
-          messages: [
-            ...(current[selectedSpeaker.speaker_id]?.messages ?? []),
-            { role: "assistant", content: `服务暂时不可用：${message}` }
-          ]
-        }
-      }));
-    } finally {
-      setIsLoading(false);
-    }
+      if (current.length >= 3) {
+        return current;
+      }
+      return [...current, speakerId];
+    });
   }
 
   return (
-    <main className="shell">
-      <section className="map-workspace">
-        <aside className="profile-panel">
-          <div className="avatar">
-            <Globe2 size={32} />
-          </div>
-          <h1>BCommunity 成员地图</h1>
-          <p>选择一位成员视角，进入独立的一对一对话。</p>
-          <div className="speaker-list">
-            {speakers.map((speaker) => (
-              <button
-                className={`speaker-chip selectable ${
-                  speaker.speaker_id === selectedSpeakerId ? "active" : ""
-                }`}
-                key={speaker.speaker_id}
-                onClick={() => selectSpeaker(speaker)}
-                type="button"
-              >
-                <UserRound size={18} />
-                <span>{speaker.name}</span>
-                <small>{speaker.location} · {speaker.role}</small>
-              </button>
-            ))}
-          </div>
-          <Link className="panel-link" href="/roundtable">
-            <UsersRound size={16} />
-            进入整桌讨论
-          </Link>
-        </aside>
-
-        <section className="map-panel">
-          <div className="chat-header">
-            <div>
-              <h2>世界地图</h2>
-              <p>{selectedSpeaker ? `${selectedSpeaker.name} · ${selectedSpeaker.location}` : "正在加载 BCommunity 成员"}</p>
+    <main className="map-home-shell">
+      <section className="portrait-field-panel">
+        <div className="map-home-header">
+          <div>
+            <div className="avatar">
+              <Sparkles size={32} />
             </div>
-            <span className="status">MAP</span>
+            <h1>BCommunity 成员星图</h1>
+            <p>点击头像进入个人主页；右侧可以选择 3 位成员发起圆桌讨论。</p>
           </div>
+          <span className="status">PEOPLE</span>
+        </div>
 
-          <div className="world-map" aria-label="BCommunity 成员地图">
-            <div className="osm-tile-layer">
-              {mapTiles.map((tile) => (
-                <div
-                  aria-hidden="true"
-                  className="osm-tile"
-                  key={`${tile.x}-${tile.y}`}
-                  style={{
-                    backgroundImage: `url(https://tile.openstreetmap.org/2/${tile.x}/${tile.y}.png)`,
-                    left: `${tile.x * 25}%`,
-                    top: `${tile.y * 25}%`
-                  }}
-                />
-              ))}
-            </div>
-            {speakers.map((speaker) => (
-              <button
-                aria-label={`选择 ${speaker.name}`}
-                className={`map-marker ${
-                  speaker.speaker_id === selectedSpeakerId ? "active" : ""
-                }`}
-                key={speaker.speaker_id}
-                onClick={() => selectSpeaker(speaker)}
-                style={{
-                  left: `${longitudeToMapX(speaker.longitude)}%`,
-                  top: `${latitudeToMapY(speaker.latitude)}%`
-                }}
-                type="button"
-              >
-                <MapPin size={20} />
-                <span>{speaker.name}</span>
-              </button>
-            ))}
-            <a
-              className="map-attribution"
-              href="https://www.openstreetmap.org/copyright"
-              rel="noreferrer"
-              target="_blank"
-            >
-              © OpenStreetMap contributors
-            </a>
-          </div>
+        {error ? <p className="error-text">服务暂时不可用：{error}</p> : null}
 
-          {selectedSpeaker ? (
-            <div className="speaker-detail">
-              <div>
-                <h2>{selectedSpeaker.name}</h2>
-                <p>{selectedSpeaker.role}</p>
-              </div>
-              <p>{selectedSpeaker.perspective}</p>
-            </div>
+        <div className="portrait-field" aria-label="BCommunity 成员头像展示">
+          <div className="portrait-field-grid" aria-hidden="true" />
+          {!speakers.length && !error ? (
+            <div className="portrait-empty">正在加载成员头像...</div>
           ) : null}
-        </section>
-
-        <section className="chat-panel map-chat-panel">
-          <div className="chat-header">
-            <div>
-              <h2>{selectedSpeaker ? `和 ${selectedSpeaker.name} 对话` : "单人对话"}</h2>
-              <p>{selectedSpeaker ? selectedSpeaker.style : "请选择地图上的一位角色"}</p>
-            </div>
-            <span className="status">1:1</span>
-          </div>
-
-          {error ? <p className="error-text">服务暂时不可用：{error}</p> : null}
-
-          <div className="messages">
-            {messages.map((message, index) => (
-              <div className={`message ${message.role}`} key={`${message.role}-${index}`}>
-                <div className="message-icon">
-                  {message.role === "assistant" ? <Bot size={18} /> : <UserRound size={18} />}
-                </div>
-                <p>{message.content}</p>
-              </div>
-            ))}
-            {isLoading ? (
-              <div className="message assistant">
-                <div className="message-icon">
-                  <Bot size={18} />
-                </div>
-                <p>{selectedSpeaker?.name ?? "角色"}正在思考...</p>
-              </div>
-            ) : null}
-          </div>
-
-          <form className="composer" onSubmit={onSubmit}>
-            <input
-              aria-label="输入问题"
-              disabled={!selectedSpeaker}
-              value={input}
-              onChange={(event) => setInput(event.target.value)}
-              placeholder={selectedSpeaker ? `问 ${selectedSpeaker.name} 一个问题` : "先选择一位角色"}
-            />
-            <button aria-label="发送" disabled={!canSend} type="submit">
-              <Send size={18} />
-            </button>
-          </form>
-        </section>
+          {speakers.map((speaker, index) => (
+            <Link
+              aria-label={`进入 ${speaker.name} 的个人主页`}
+              className="portrait-marker"
+              href={`/member/${speaker.speaker_id}`}
+              key={speaker.speaker_id}
+              style={portraitPosition(index)}
+            >
+              <SpeakerAvatar
+                className="field-member-avatar"
+                showMark={false}
+                speakerId={speaker.speaker_id}
+              />
+              <span>{speaker.name}</span>
+            </Link>
+          ))}
+        </div>
       </section>
+
+      <aside className="roundtable-picker-panel">
+        <div className="picker-header">
+          <div className="avatar">
+            <UsersRound size={28} />
+          </div>
+          <div>
+            <h2>圆桌对话</h2>
+            <p>选择 3 位成员组成本轮圆桌。</p>
+          </div>
+        </div>
+
+        <div className="selection-dock compact">
+          <div>
+            <span>已选择 {selectedSpeakerIds.length}/3</span>
+            <p>{selectedSpeakerIds.length === 3 ? "可以进入圆桌" : "从名单中加入成员"}</p>
+          </div>
+          <Link
+            aria-disabled={selectedSpeakerIds.length !== 3}
+            className={`primary-link ${selectedSpeakerIds.length === 3 ? "" : "disabled"}`}
+            href={selectedSpeakerIds.length === 3 ? roundtableHref : "#"}
+          >
+            <UsersRound size={18} />
+            开始
+          </Link>
+        </div>
+
+        {selectedSpeakers.length ? (
+          <div className="selected-strip">
+            {selectedSpeakers.map((speaker) => (
+              <button
+                className="selected-person"
+                key={speaker.speaker_id}
+                onClick={() => toggleRoundtableSpeaker(speaker.speaker_id)}
+                type="button"
+              >
+                <SpeakerAvatar
+                  className="mini-member-avatar"
+                  showMark={false}
+                  speakerId={speaker.speaker_id}
+                />
+                <span>{speaker.name}</span>
+                <X size={14} />
+              </button>
+            ))}
+          </div>
+        ) : null}
+
+        <div className="picker-list">
+          {speakers.map((speaker) => {
+            const isSelected = selectedSpeakerIds.includes(speaker.speaker_id);
+            const isLocked = !isSelected && selectedSpeakerIds.length >= 3;
+
+            return (
+              <div className="picker-row" key={speaker.speaker_id}>
+                <Link className="picker-person-link" href={`/member/${speaker.speaker_id}`}>
+                  <SpeakerAvatar
+                    className="mini-member-avatar"
+                    showMark={false}
+                    speakerId={speaker.speaker_id}
+                  />
+                  <div>
+                    <strong>{speaker.name}</strong>
+                    <small>{speaker.location} · {speaker.role}</small>
+                  </div>
+                </Link>
+                <button
+                  aria-label={`${isSelected ? "移出" : "加入"}圆桌：${speaker.name}`}
+                  className={`picker-toggle ${isSelected ? "selected" : ""}`}
+                  disabled={isLocked}
+                  onClick={() => toggleRoundtableSpeaker(speaker.speaker_id)}
+                  type="button"
+                >
+                  {isSelected ? <Check size={16} /> : <Plus size={16} />}
+                </button>
+              </div>
+            );
+          })}
+        </div>
+      </aside>
     </main>
   );
 }

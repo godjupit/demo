@@ -1,34 +1,36 @@
 "use client";
 
 import Link from "next/link";
-import { FormEvent, useMemo, useState } from "react";
-import { ArrowLeft, CircleUserRound, MessageCircle, Send, Sparkles } from "lucide-react";
+import type { CSSProperties } from "react";
+import { FormEvent, useEffect, useMemo, useState } from "react";
+import { ArrowLeft, MessageCircle, Send, Sparkles } from "lucide-react";
 import {
   RoundtableResponse,
+  SpeakerInfo,
   TargetedFollowup,
+  getRoundtableSpeakers,
   streamRoundtable,
   streamTargetedFollowup
 } from "@/lib/api";
+import { avatarForSpeaker } from "@/lib/avatars";
 
-const speakerHints = [
-  { id: "luneurs", name: "Luneurs", hint: "社区品牌" },
-  { id: "arch", name: "Arch", hint: "可持续纺织" },
-  { id: "smart_air", name: "Smart Air", hint: "洁净空气" },
-  { id: "pottery_workshop", name: "乐天陶社", hint: "陶艺社区" },
-  { id: "mumo", name: "MUMO 木墨", hint: "耐用物具" },
-  { id: "rect_repair", name: "修四边形", hint: "城市游戏" },
-  { id: "ge_yulu", name: "葛宇路", hint: "公共空间" },
-  { id: "ergao_ben", name: "二高 & Ben", hint: "南方舞" },
-  { id: "zhao_yiren", name: "赵伊人", hint: "社区互助" },
-  { id: "xiaohei", name: "小黑", hint: "手工版画" },
-  { id: "zhu_jingming", name: "朱璟茗", hint: "精神健康" },
-  { id: "fang_chenchu", name: "晨初", hint: "艺术公教" },
-  { id: "liao_zhili", name: "廖智立", hint: "共居社区" },
-  { id: "xu_yihan", name: "徐艺函", hint: "照护劳动" },
-  { id: "xiuxiu", name: "绣绣故事会", hint: "刺绣叙事" },
-  { id: "spring_changzhou", name: "春潮 Spring", hint: "AI 硬件" },
-  { id: "sailor_club", name: "水手俱乐部", hint: "食物材料游戏" }
-];
+function SpeakerAvatarView({ speakerId }: { speakerId: string }) {
+  const avatar = avatarForSpeaker(speakerId);
+
+  return (
+    <div
+      className="mini-member-avatar"
+      style={
+        {
+          "--avatar-a": avatar.colors[0],
+          "--avatar-b": avatar.colors[1]
+        } as CSSProperties
+      }
+    >
+      <span>{avatar.initials}</span>
+    </div>
+  );
+}
 
 function renderInlineMarkdown(text: string) {
   return text.split(/(\*\*[^*]+\*\*)/g).map((part, index) => {
@@ -51,6 +53,8 @@ function MarkdownText({ text }: { text: string }) {
 
 export default function RoundtablePage() {
   const [topic, setTopic] = useState("AI 会如何改变社区艺术？");
+  const [speakers, setSpeakers] = useState<SpeakerInfo[]>([]);
+  const [selectedSpeakerIds, setSelectedSpeakerIds] = useState<string[]>([]);
   const [rounds, setRounds] = useState<RoundtableResponse[]>([]);
   const [followupsByRound, setFollowupsByRound] = useState<Record<number, TargetedFollowup[]>>({});
   const [targetDraft, setTargetDraft] = useState<{
@@ -64,14 +68,63 @@ export default function RoundtablePage() {
   const [isTargetLoading, setIsTargetLoading] = useState(false);
   const [isStopped, setIsStopped] = useState(false);
 
+  useEffect(() => {
+    let isMounted = true;
+
+    getRoundtableSpeakers()
+      .then((items) => {
+        if (!isMounted) {
+          return;
+        }
+        const urlSpeakerIds =
+          typeof window === "undefined"
+            ? []
+            : (new URLSearchParams(window.location.search).get("speakers") ?? "")
+                .split(",")
+                .map((speakerId) => speakerId.trim())
+                .filter(Boolean);
+        const validUrlSpeakerIds = urlSpeakerIds.filter((speakerId) =>
+          items.some((speaker) => speaker.speaker_id === speakerId)
+        );
+        setSpeakers(items);
+        setSelectedSpeakerIds(
+          validUrlSpeakerIds.length === 3
+            ? validUrlSpeakerIds
+            : items.slice(0, 3).map((speaker) => speaker.speaker_id)
+        );
+      })
+      .catch((caught) => {
+        if (isMounted) {
+          setError(caught instanceof Error ? caught.message : "成员加载失败");
+        }
+      });
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
   const canRun = useMemo(
-    () => topic.trim().length > 0 && !isLoading && !isTargetLoading && !isStopped,
-    [topic, isLoading, isTargetLoading, isStopped]
+    () =>
+      topic.trim().length > 0 &&
+      selectedSpeakerIds.length === 3 &&
+      !isLoading &&
+      !isTargetLoading &&
+      !isStopped,
+    [topic, selectedSpeakerIds, isLoading, isTargetLoading, isStopped]
   );
 
   const canAskTarget = useMemo(
     () => Boolean(targetDraft?.question.trim()) && !isLoading && !isTargetLoading && !isStopped,
     [targetDraft, isLoading, isTargetLoading, isStopped]
+  );
+
+  const selectedSpeakers = useMemo(
+    () =>
+      selectedSpeakerIds
+        .map((speakerId) => speakers.find((speaker) => speaker.speaker_id === speakerId))
+        .filter((speaker): speaker is SpeakerInfo => Boolean(speaker)),
+    [speakers, selectedSpeakerIds]
   );
 
   async function onSubmit(event: FormEvent<HTMLFormElement>) {
@@ -95,7 +148,7 @@ export default function RoundtablePage() {
     setRounds((current) => [...current, pendingRound]);
 
     try {
-      await streamRoundtable(topic.trim(), history, (event) => {
+      await streamRoundtable(topic.trim(), selectedSpeakerIds, history, (event) => {
         const updateCurrentRound = (
           updater: (round: RoundtableResponse) => RoundtableResponse
         ) => {
@@ -302,19 +355,24 @@ export default function RoundtablePage() {
         <aside className="profile-panel">
           <Link className="back-link" href="/">
             <ArrowLeft size={16} />
-            单角色对话
+            重新选择成员
           </Link>
           <div className="avatar">
             <Sparkles size={32} />
           </div>
           <h1>圆桌讨论</h1>
-          <p>BCommunity 成员围绕同一话题依次发言，主持人最后收束。</p>
-          <div className="speaker-list">
-            {speakerHints.map((speaker) => (
-              <div className="speaker-chip" key={speaker.id}>
-                <CircleUserRound size={18} />
-                <span>{speaker.name}</span>
-                <small>{speaker.hint}</small>
+          <p>由展示页选出的 3 位成员围绕同一话题发言，主持人最后收束。</p>
+          <div className="selection-count">
+            已选择 {selectedSpeakerIds.length}/3
+          </div>
+          <div className="roundtable-selected-list">
+            {selectedSpeakers.map((speaker) => (
+              <div className="roundtable-selected-card" key={speaker.speaker_id}>
+                <SpeakerAvatarView speakerId={speaker.speaker_id} />
+                <div>
+                  <strong>{speaker.name}</strong>
+                  <small>{speaker.role}</small>
+                </div>
               </div>
             ))}
           </div>
@@ -324,7 +382,7 @@ export default function RoundtablePage() {
           <div className="chat-header">
             <div>
               <h2>讨论主题</h2>
-              <p>{rounds.length ? "点某位成员定向追问，或开启整桌下一轮" : "输入一个问题，让成员们从不同实践角度展开"}</p>
+              <p>{rounds.length ? "点某位成员定向追问，或用当前 3 位成员开启下一轮" : "选择 3 位成员，再输入一个值得讨论的问题"}</p>
             </div>
             <span className="status">ROUND</span>
           </div>
@@ -402,7 +460,10 @@ export default function RoundtablePage() {
                     {round.turns.map((turn) => (
                   <article className="discussion-card" key={turn.speaker_id}>
                     <div className="discussion-card-title">
-                      <h3>{turn.speaker_name}</h3>
+                      <div className="speaker-title">
+                        <SpeakerAvatarView speakerId={turn.speaker_id} />
+                        <h3>{turn.speaker_name}</h3>
+                      </div>
                       <span>{turn.role}</span>
                     </div>
                     <MarkdownText text={turn.content} />
@@ -428,7 +489,10 @@ export default function RoundtablePage() {
                     {(followupsByRound[roundIndex] ?? []).map((followup) => (
                       <article className="discussion-card targeted" key={followup.id}>
                         <div className="discussion-card-title">
-                          <h3>追问 {followup.speaker_name}</h3>
+                          <div className="speaker-title">
+                            <SpeakerAvatarView speakerId={followup.speaker_id} />
+                            <h3>追问 {followup.speaker_name}</h3>
+                          </div>
                           <span>{followup.role || "定向回答"}</span>
                         </div>
                         <p className="target-question">{followup.question}</p>

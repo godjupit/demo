@@ -183,6 +183,18 @@ SPEAKERS: list[RoundtableSpeaker] = [
         "longitude": 113.1214,
     },
     {
+        "speaker_id": "buzi",
+        "name": "不子 / 绣绣故事会",
+        "role": "刺绣、布料与女性手工叙事实践者",
+        "perspective": "从刺绣、布料、女性手工劳动、身体经验和故事讲述看个人实践如何进入共同创作。",
+        "style": "细腻、贴近身体，习惯从一块布、一段手工劳动和一个人的故事慢慢展开。",
+        "location": "广州 / 顺德",
+        "map_x": 79,
+        "map_y": 55,
+        "latitude": 23.0207,
+        "longitude": 113.1214,
+    },
+    {
         "speaker_id": "spring_changzhou",
         "name": "春潮 Spring / 长洲岛瑶寨",
         "role": "AI 硬件与社区艺术实践者",
