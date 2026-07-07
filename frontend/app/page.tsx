@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import type { CSSProperties } from "react";
 import { useEffect, useMemo, useState } from "react";
 import { Check, Plus, Sparkles, UsersRound, X } from "lucide-react";
 import { SpeakerAvatar } from "@/components/SpeakerAvatar";
@@ -9,94 +8,19 @@ import { SpeakerInfo, getRoundtableSpeakers } from "@/lib/api";
 import {
   MapLens,
   MainIssue,
-  RelationCluster,
   mainIssues,
   memberRelations,
   methodClusters,
-  relationMemberPositions,
-  valueClusters
+  valueClusters,
 } from "@/lib/memberRelations";
+import { MemberLandscapeMap } from "@/components/community-map/MemberLandscapeMap";
 
 const mapLensOptions: Array<{ key: MapLens; label: string }> = [
   { key: "default", label: "自由星图" },
   { key: "values", label: "价值观" },
   { key: "methods", label: "方法论" },
-  { key: "issues", label: "主要议题" }
+  { key: "issues", label: "主要议题" },
 ];
-
-const portraitPositions = [
-  { left: 12, top: 18 },
-  { left: 31, top: 12 },
-  { left: 52, top: 18 },
-  { left: 74, top: 11 },
-  { left: 88, top: 26 },
-  { left: 20, top: 37 },
-  { left: 43, top: 34 },
-  { left: 64, top: 39 },
-  { left: 82, top: 49 },
-  { left: 10, top: 60 },
-  { left: 30, top: 63 },
-  { left: 51, top: 58 },
-  { left: 70, top: 68 },
-  { left: 90, top: 72 },
-  { left: 19, top: 82 },
-  { left: 45, top: 83 },
-  { left: 66, top: 87 },
-  { left: 83, top: 88 }
-];
-
-function clampPercent(value: number) {
-  return Math.min(94, Math.max(4, value));
-}
-
-function portraitPosition(index: number) {
-  const position = portraitPositions[index % portraitPositions.length];
-  const repeat = Math.floor(index / portraitPositions.length);
-  return {
-    left: `${clampPercent(position.left + repeat * 2.2)}%`,
-    top: `${clampPercent(position.top + repeat * 1.8)}%`
-  };
-}
-
-function relationPositionStyle(
-  lens: MapLens,
-  speakerId: string,
-  index: number
-): CSSProperties {
-  if (lens === "default") {
-    return portraitPosition(index);
-  }
-
-  const position = relationMemberPositions[lens][speakerId];
-  if (!position) {
-    return portraitPosition(index);
-  }
-
-  return {
-    left: `${position.x}%`,
-    top: `${position.y}%`
-  };
-}
-
-function relationLabelsForMember(
-  speakerId: string,
-  lens: MapLens,
-  clusters: RelationCluster[]
-) {
-  const metadata = memberRelations[speakerId];
-  const ids =
-    lens === "values"
-      ? metadata?.valueClusters ?? []
-      : lens === "methods"
-        ? metadata?.methodologies ?? []
-        : lens === "issues"
-          ? metadata?.issues ?? []
-          : [];
-
-  return ids
-    .map((id) => clusters.find((cluster) => cluster.id === id)?.label)
-    .filter((label): label is string => Boolean(label));
-}
 
 function recommendedButtonLabel(issue: MainIssue, selectedSpeakerIds: string[]) {
   const recommendedIds = issue.recommendedMemberIds;
@@ -146,7 +70,7 @@ export default function Home() {
       selectedSpeakerIds
         .map((speakerId) => speakers.find((speaker) => speaker.speaker_id === speakerId))
         .filter((speaker): speaker is SpeakerInfo => Boolean(speaker)),
-    [speakers, selectedSpeakerIds]
+    [speakers, selectedSpeakerIds],
   );
 
   const roundtableHref = useMemo(() => {
@@ -156,44 +80,34 @@ export default function Home() {
   }, [selectedSpeakerIds]);
 
   const relationClusters = useMemo(() => {
-    if (activeLens === "values") {
-      return valueClusters;
-    }
-    if (activeLens === "methods") {
-      return methodClusters;
-    }
-    if (activeLens === "issues") {
-      return mainIssues;
-    }
+    if (activeLens === "values") return valueClusters;
+    if (activeLens === "methods") return methodClusters;
+    if (activeLens === "issues") return mainIssues;
     return [];
   }, [activeLens]);
 
   const activeClusterId = hoveredClusterId ?? focusedClusterId;
   const activeCluster = useMemo(
     () => relationClusters.find((cluster) => cluster.id === activeClusterId) ?? null,
-    [activeClusterId, relationClusters]
+    [activeClusterId, relationClusters],
   );
   const focusedIssue = useMemo(
     () =>
       activeLens === "issues"
         ? (mainIssues.find((issue) => issue.id === focusedClusterId) ?? null)
         : null,
-    [activeLens, focusedClusterId]
+    [activeLens, focusedClusterId],
   );
   const sideCluster = activeLens === "issues" ? focusedIssue : activeCluster;
 
   const hoveredMemberClusterIds = useMemo(() => {
-    if (!hoveredMemberId || activeLens === "default") {
-      return [];
-    }
+    if (!hoveredMemberId || activeLens === "default") return [];
     const metadata = memberRelations[hoveredMemberId];
     return activeLens === "values"
       ? metadata?.valueClusters ?? []
       : activeLens === "methods"
         ? metadata?.methodologies ?? []
-        : activeLens === "issues"
-          ? metadata?.issues ?? []
-          : [];
+        : metadata?.issues ?? [];
   }, [activeLens, hoveredMemberId]);
 
   function toggleRoundtableSpeaker(speakerId: string) {
@@ -211,7 +125,7 @@ export default function Home() {
   function addRecommendedRoundtable(issue: MainIssue) {
     const knownSpeakerIds = new Set(speakers.map((speaker) => speaker.speaker_id));
     const availableRecommendedIds = issue.recommendedMemberIds.filter((id) =>
-      knownSpeakerIds.has(id)
+      knownSpeakerIds.has(id),
     );
     const remainingSlots = 3 - selectedSpeakerIds.length;
 
@@ -233,7 +147,7 @@ export default function Home() {
     setRoundtableNotice(
       nextIds.length === availableRecommendedIds.length
         ? "推荐成员已加入圆桌。"
-        : `已加入 ${nextIds.length} 位推荐成员，圆桌席位已满。`
+        : `已加入 ${nextIds.length} 位推荐成员，圆桌席位已满。`,
     );
   }
 
@@ -250,26 +164,19 @@ export default function Home() {
     setRoundtableNotice("");
   }
 
-  function isSpeakerDimmed(speakerId: string) {
-    if (activeLens === "default") {
-      return false;
-    }
-    if (activeCluster) {
-      return !activeCluster.memberIds.includes(speakerId);
-    }
-    return false;
-  }
-
   return (
     <main className="map-home-shell">
       <section className="portrait-field-panel">
+        {/* Map Header */}
         <div className="map-home-header">
-          <div>
-            <div className="avatar">
-              <Sparkles size={32} />
+          <div className="map-title-group">
+            <div className="map-header-icon">
+              <Sparkles size={24} />
             </div>
-            <h1>B Community 成员星图</h1>
-            <p>点击头像进入个人主页；右侧可以选择 3 位成员发起圆桌讨论。</p>
+            <div className="map-title-copy">
+              <h1>B Community 成员地图</h1>
+              <p>在共同景观中遇见实践者，并邀请他们进入圆桌。</p>
+            </div>
           </div>
           <div className="map-lens-control" aria-label="关系视角">
             <span>关系视角</span>
@@ -291,118 +198,36 @@ export default function Home() {
 
         {error ? <p className="error-text">服务暂时不可用：{error}</p> : null}
 
-        <div
-          className={`portrait-field lens-${activeLens}`}
-          aria-label="B Community 成员头像展示"
-          onClick={(event) => {
-            const target = event.target as HTMLElement;
-            if (event.currentTarget === target || target.classList.contains("portrait-field-grid")) {
-              setFocusedClusterId(null);
-            }
-          }}
-        >
-          <div className="portrait-field-grid" aria-hidden="true" />
-          {!speakers.length && !error ? (
-            <div className="portrait-empty">正在加载成员头像...</div>
-          ) : null}
-          {activeLens !== "default" ? (
-            <svg className="relation-edges" aria-hidden="true">
-              {relationClusters.flatMap((cluster) =>
-                cluster.memberIds.map((memberId) => {
-                  const memberPosition = relationMemberPositions[activeLens][memberId];
-                  if (!memberPosition || !speakers.some((speaker) => speaker.speaker_id === memberId)) {
-                    return null;
-                  }
-                  const isClusterActive = activeClusterId === cluster.id;
-                  const isMemberHovered = hoveredMemberId === memberId;
-                  const isHoverRelated = hoveredMemberClusterIds.includes(cluster.id);
+        {/* Member Landscape Map */}
+        {!speakers.length && !error ? (
+          <div className="portrait-empty">正在加载成员...</div>
+        ) : (
+          <MemberLandscapeMap
+            speakers={speakers}
+            activeLens={activeLens}
+            selectedSpeakerIds={selectedSpeakerIds}
+            focusedClusterId={focusedClusterId}
+            activeClusterId={activeClusterId}
+            hoveredMemberId={hoveredMemberId}
+            hoveredMemberClusterIds={hoveredMemberClusterIds}
+            relationClusters={relationClusters}
+            onClusterToggle={toggleCluster}
+            onClusterHover={setHoveredClusterId}
+            onMemberHover={setHoveredMemberId}
+            onBackgroundClick={() => setFocusedClusterId(null)}
+          />
+        )}
 
-                  return (
-                    <line
-                      className={`relation-edge ${
-                        isClusterActive || isMemberHovered || isHoverRelated ? "active" : ""
-                      } ${activeCluster && !isClusterActive ? "muted" : ""}`}
-                      key={`${cluster.id}-${memberId}`}
-                      x1={`${cluster.position.x}%`}
-                      y1={`${cluster.position.y}%`}
-                      x2={`${memberPosition.x}%`}
-                      y2={`${memberPosition.y}%`}
-                    />
-                  );
-                })
-              )}
-            </svg>
-          ) : null}
-          {relationClusters.map((cluster) => {
-            const isActive = activeClusterId === cluster.id;
-            const isMuted = Boolean(activeClusterId) && !isActive;
-
-            return (
-              <button
-                className={`relation-cluster-node ${isActive ? "active" : ""} ${
-                  isMuted ? "muted" : ""
-                }`}
-                key={cluster.id}
-                onClick={(event) => {
-                  event.stopPropagation();
-                  toggleCluster(cluster.id);
-                }}
-                onMouseEnter={() => setHoveredClusterId(cluster.id)}
-                onMouseLeave={() => setHoveredClusterId(null)}
-                style={{
-                  left: `${cluster.position.x}%`,
-                  top: `${cluster.position.y}%`
-                }}
-                type="button"
-              >
-                {cluster.shortLabel ?? cluster.label}
-              </button>
-            );
-          })}
-          {speakers.map((speaker, index) => (
-            <Link
-              aria-label={`进入 ${speaker.name} 的个人主页`}
-              className={`portrait-marker ${isSpeakerDimmed(speaker.speaker_id) ? "dimmed" : ""}`}
-              href={`/member/${speaker.speaker_id}`}
-              key={speaker.speaker_id}
-              onMouseEnter={() => setHoveredMemberId(speaker.speaker_id)}
-              onMouseLeave={() => setHoveredMemberId(null)}
-              style={relationPositionStyle(activeLens, speaker.speaker_id, index)}
-            >
-              <SpeakerAvatar
-                className="field-member-avatar"
-                showMark={false}
-                speakerId={speaker.speaker_id}
-              />
-              <span>{speaker.name}</span>
-              {activeLens !== "default" && hoveredMemberId === speaker.speaker_id ? (
-                <span className="relation-tooltip">
-                  <strong>{speaker.name}</strong>
-                  <small>
-                    {activeLens === "values"
-                      ? "关联价值观："
-                      : activeLens === "methods"
-                        ? "实践方法："
-                        : "相关议题："}
-                  </small>
-                  {relationLabelsForMember(speaker.speaker_id, activeLens, relationClusters).map(
-                    (label) => (
-                      <em key={label}>• {label}</em>
-                    )
-                  )}
-                </span>
-              ) : null}
-            </Link>
-          ))}
-          {activeCluster ? (
-            <aside className="relation-description">
-              <strong>{activeCluster.label}</strong>
-              <p>{activeCluster.description}</p>
-            </aside>
-          ) : null}
-        </div>
+        {/* Relation description (bottom-left overlay) */}
+        {activeCluster && activeLens !== "issues" ? (
+          <aside className="relation-description">
+            <strong>{activeCluster.label}</strong>
+            <p>{activeCluster.description}</p>
+          </aside>
+        ) : null}
       </section>
 
+      {/* Roundtable Panel (right sidebar) */}
       <aside className="roundtable-picker-panel">
         <div className="picker-header">
           <div className="avatar">
@@ -462,7 +287,7 @@ export default function Home() {
                 disabled={
                   selectedSpeakerIds.length >= 3 ||
                   focusedIssue.recommendedMemberIds.every((id) =>
-                    selectedSpeakerIds.includes(id)
+                    selectedSpeakerIds.includes(id),
                   )
                 }
                 onClick={() => addRecommendedRoundtable(focusedIssue)}

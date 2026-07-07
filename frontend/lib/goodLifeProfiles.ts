@@ -7331,7 +7331,7 @@ export const goodLifeProfiles: Record<string, MemberProfileData> = {
             ]
           },
           {
-            "id": "diy",
+            "id": "diy-works",
             "title": "代表作品",
             "subtitle": "从 DIY 到产品线的创造力演化",
             "kind": "cases",
