@@ -7,6 +7,7 @@ from fastapi.responses import StreamingResponse
 from pydantic import BaseModel, Field
 
 from app.db.conversations import load_conversation, upsert_conversation
+from app.knowledge.good_life_local import retrieve_good_life_chunks
 from app.knowledge.pgvector_store import retrieve_pgvector
 from app.roundtable.llm import call_llm, stream_llm
 from app.roundtable.prompts import (
@@ -164,10 +165,13 @@ def _speaker_agent_id(speaker_id: str) -> str:
 
 
 def _retrieve_speaker_context(speaker_id: str, question: str) -> tuple[str, list[dict]]:
+    local_chunks = retrieve_good_life_chunks(person_id=speaker_id, query=question, limit=4)
     try:
         chunks = retrieve_pgvector(query=question, person_id=speaker_id, limit=6)
     except Exception:
-        return "暂未从 PostgreSQL/pgvector 检索到资料。", []
+        chunks = []
+
+    chunks = [*local_chunks, *chunks]
 
     if not chunks:
         return "暂未从 PostgreSQL/pgvector 检索到资料。", []
