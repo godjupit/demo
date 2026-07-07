@@ -1,0 +1,280 @@
+{
+  "members": [
+    {
+      "memberId": "arch",
+      "name": "Arch",
+      "sourceFiles": [
+        "D:\\demo\\demo\\knowledge-base\\cleaned\\good-life\\arch.md"
+      ],
+      "cleanedFile": "knowledge-base/cleaned/good-life/arch.md",
+      "structuredFile": "knowledge-base/structured/arch.json",
+      "status": "complete",
+      "dimensions": {
+        "create": true,
+        "live": true,
+        "benefit": true
+      },
+      "warnings": []
+    },
+    {
+      "memberId": "ergao_ben",
+      "name": "二高 & Ben / 二高表演",
+      "sourceFiles": [
+        "D:\\demo\\demo\\knowledge-base\\cleaned\\good-life\\ergao_ben.md"
+      ],
+      "cleanedFile": "knowledge-base/cleaned/good-life/ergao_ben.md",
+      "structuredFile": "knowledge-base/structured/ergao_ben.json",
+      "status": "complete",
+      "dimensions": {
+        "create": true,
+        "live": true,
+        "benefit": true
+      },
+      "warnings": []
+    },
+    {
+      "memberId": "fang_chenchu",
+      "name": "晨初 / 假杂志、boPOmofo",
+      "sourceFiles": [
+        "D:\\demo\\demo\\knowledge-base\\cleaned\\good-life\\fang_chenchu.md"
+      ],
+      "cleanedFile": "knowledge-base/cleaned/good-life/fang_chenchu.md",
+      "structuredFile": "knowledge-base/structured/fang_chenchu.json",
+      "status": "complete",
+      "dimensions": {
+        "create": true,
+        "live": true,
+        "benefit": true
+      },
+      "warnings": []
+    },
+    {
+      "memberId": "ge_yulu",
+      "name": "葛宇路",
+      "sourceFiles": [
+        "D:\\demo\\demo\\knowledge-base\\cleaned\\good-life\\ge_yulu.md"
+      ],
+      "cleanedFile": "knowledge-base/cleaned/good-life/ge_yulu.md",
+      "structuredFile": "knowledge-base/structured/ge_yulu.json",
+      "status": "complete",
+      "dimensions": {
+        "create": true,
+        "live": true,
+        "benefit": true
+      },
+      "warnings": []
+    },
+    {
+      "memberId": "liao_zhili",
+      "name": "廖智立 / Dweller、普罗托邦",
+      "sourceFiles": [
+        "D:\\demo\\demo\\knowledge-base\\cleaned\\good-life\\liao_zhili.md"
+      ],
+      "cleanedFile": "knowledge-base/cleaned/good-life/liao_zhili.md",
+      "structuredFile": "knowledge-base/structured/liao_zhili.json",
+      "status": "complete",
+      "dimensions": {
+        "create": true,
+        "live": true,
+        "benefit": true
+      },
+      "warnings": []
+    },
+    {
+      "memberId": "luneurs",
+      "name": "Luneurs",
+      "sourceFiles": [
+        "D:\\demo\\demo\\knowledge-base\\cleaned\\good-life\\luneurs.md"
+      ],
+      "cleanedFile": "knowledge-base/cleaned/good-life/luneurs.md",
+      "structuredFile": "knowledge-base/structured/luneurs.json",
+      "status": "complete",
+      "dimensions": {
+        "create": true,
+        "live": true,
+        "benefit": true
+      },
+      "warnings": []
+    },
+    {
+      "memberId": "mumo",
+      "name": "MUMO 木墨",
+      "sourceFiles": [
+        "D:\\demo\\demo\\knowledge-base\\cleaned\\good-life\\mumo.md"
+      ],
+      "cleanedFile": "knowledge-base/cleaned/good-life/mumo.md",
+      "structuredFile": "knowledge-base/structured/mumo.json",
+      "status": "complete",
+      "dimensions": {
+        "create": true,
+        "live": true,
+        "benefit": true
+      },
+      "warnings": []
+    },
+    {
+      "memberId": "pottery_workshop",
+      "name": "乐天陶社",
+      "sourceFiles": [
+        "D:\\demo\\demo\\knowledge-base\\cleaned\\good-life\\pottery_workshop.md"
+      ],
+      "cleanedFile": "knowledge-base/cleaned/good-life/pottery_workshop.md",
+      "structuredFile": "knowledge-base/structured/pottery_workshop.json",
+      "status": "complete",
+      "dimensions": {
+        "create": true,
+        "live": true,
+        "benefit": true
+      },
+      "warnings": []
+    },
+    {
+      "memberId": "rect_repair",
+      "name": "阿久、天琦 / 修四边形",
+      "sourceFiles": [
+        "D:\\demo\\demo\\knowledge-base\\cleaned\\good-life\\rect_repair.md"
+      ],
+      "cleanedFile": "knowledge-base/cleaned/good-life/rect_repair.md",
+      "structuredFile": "knowledge-base/structured/rect_repair.json",
+      "status": "complete",
+      "dimensions": {
+        "create": true,
+        "live": true,
+        "benefit": true
+      },
+      "warnings": []
+    },
+    {
+      "memberId": "sailor_club",
+      "name": "水手俱乐部",
+      "sourceFiles": [
+        "D:\\demo\\demo\\knowledge-base\\cleaned\\good-life\\sailor_club.md"
+      ],
+      "cleanedFile": "knowledge-base/cleaned/good-life/sailor_club.md",
+      "structuredFile": "knowledge-base/structured/sailor_club.json",
+      "status": "complete",
+      "dimensions": {
+        "create": true,
+        "live": true,
+        "benefit": true
+      },
+      "warnings": []
+    },
+    {
+      "memberId": "smart_air",
+      "name": "Smart Air / 聪明空气",
+      "sourceFiles": [
+        "D:\\demo\\demo\\knowledge-base\\cleaned\\good-life\\smart_air.md"
+      ],
+      "cleanedFile": "knowledge-base/cleaned/good-life/smart_air.md",
+      "structuredFile": "knowledge-base/structured/smart_air.json",
+      "status": "complete",
+      "dimensions": {
+        "create": true,
+        "live": true,
+        "benefit": true
+      },
+      "warnings": []
+    },
+    {
+      "memberId": "spring_changzhou",
+      "name": "春潮 Spring / 长洲岛瑶寨",
+      "sourceFiles": [
+        "D:\\demo\\demo\\knowledge-base\\cleaned\\good-life\\spring_changzhou.md"
+      ],
+      "cleanedFile": "knowledge-base/cleaned/good-life/spring_changzhou.md",
+      "structuredFile": "knowledge-base/structured/spring_changzhou.json",
+      "status": "complete",
+      "dimensions": {
+        "create": true,
+        "live": true,
+        "benefit": true
+      },
+      "warnings": []
+    },
+    {
+      "memberId": "xiaohei",
+      "name": "小黑 / 漫画与手工艺",
+      "sourceFiles": [
+        "D:\\demo\\demo\\knowledge-base\\cleaned\\good-life\\xiaohei.md"
+      ],
+      "cleanedFile": "knowledge-base/cleaned/good-life/xiaohei.md",
+      "structuredFile": "knowledge-base/structured/xiaohei.json",
+      "status": "complete",
+      "dimensions": {
+        "create": true,
+        "live": true,
+        "benefit": true
+      },
+      "warnings": []
+    },
+    {
+      "memberId": "xiuxiu",
+      "name": "Ruifen & 不子 / 绣绣故事会",
+      "sourceFiles": [
+        "D:\\demo\\demo\\knowledge-base\\cleaned\\good-life\\xiuxiu.md"
+      ],
+      "cleanedFile": "knowledge-base/cleaned/good-life/xiuxiu.md",
+      "structuredFile": "knowledge-base/structured/xiuxiu.json",
+      "status": "complete",
+      "dimensions": {
+        "create": true,
+        "live": true,
+        "benefit": true
+      },
+      "warnings": []
+    },
+    {
+      "memberId": "xu_yihan",
+      "name": "徐艺函 / 起风了社区",
+      "sourceFiles": [
+        "D:\\demo\\demo\\knowledge-base\\cleaned\\good-life\\xu_yihan.md"
+      ],
+      "cleanedFile": "knowledge-base/cleaned/good-life/xu_yihan.md",
+      "structuredFile": "knowledge-base/structured/xu_yihan.json",
+      "status": "complete",
+      "dimensions": {
+        "create": true,
+        "live": true,
+        "benefit": true
+      },
+      "warnings": []
+    },
+    {
+      "memberId": "zhao_yiren",
+      "name": "赵伊人 / 定海桥互助社",
+      "sourceFiles": [
+        "D:\\demo\\demo\\knowledge-base\\cleaned\\good-life\\zhao_yiren.md"
+      ],
+      "cleanedFile": "knowledge-base/cleaned/good-life/zhao_yiren.md",
+      "structuredFile": "knowledge-base/structured/zhao_yiren.json",
+      "status": "complete",
+      "dimensions": {
+        "create": true,
+        "live": true,
+        "benefit": true
+      },
+      "warnings": []
+    },
+    {
+      "memberId": "zhu_jingming",
+      "name": "朱璟茗",
+      "sourceFiles": [
+        "D:\\demo\\demo\\knowledge-base\\cleaned\\good-life\\zhu_jingming.md"
+      ],
+      "cleanedFile": "knowledge-base/cleaned/good-life/zhu_jingming.md",
+      "structuredFile": "knowledge-base/structured/zhu_jingming.json",
+      "status": "complete",
+      "dimensions": {
+        "create": true,
+        "live": true,
+        "benefit": true
+      },
+      "warnings": []
+    }
+  ],
+  "unmatchedFiles": [],
+  "ambiguousFiles": [],
+  "unsupportedFiles": [],
+  "lastUpdated": "2026-07-07"
+}

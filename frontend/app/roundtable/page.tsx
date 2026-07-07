@@ -353,7 +353,7 @@ export default function RoundtablePage() {
     <main className="shell">
       <section className="roundtable-workspace">
         <aside className="profile-panel">
-          <Link className="back-link" href="/">
+          <Link className="back-link" href="/?view=map">
             <ArrowLeft size={16} />
             重新选择成员
           </Link>

@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
+    "build:good-life": "python ../tools/generate_good_life_profiles.py",
     "start": "next start",
     "lint": "eslint ."
   },

@@ -1,0 +1,753 @@
+{
+  "id": "rect_repair",
+  "profile": {
+    "name": "阿久、天琦 / 修四边形"
+  },
+  "triangleTitle": "阿久、天琦 / 修四边形的良好生活三角",
+  "triangleSubtitle": "基于该成员良好生活标准分类文件整理的创造力、身心安顿与公共性内容。",
+  "centerText": "Game as social fabric",
+  "centerSubtitle": "游戏作为社会连接的织造术",
+  "dimensions": [
+    {
+      "key": "create",
+      "title": "创造力 / Create Well",
+      "subtitle": "Create Well",
+      "intro": "\"仍然愿意想象、表达、创造，是在既有路径之外，在线性的成功学叙事之外，并把一些新的可能带进现实。\"",
+      "sections": [
+        {
+          "id": "section-1",
+          "title": "拒绝既有路径",
+          "subtitle": "从电子游戏出走",
+          "kind": "boundary",
+          "blocks": [
+            {
+              "type": "paragraph",
+              "paragraphs": [
+                "阿久的创造力起点是系统性的拒绝。在互娱大厂做电子游戏时，她看到的不只是个人的职业倦怠，而是整个媒介范式的困境："
+              ]
+            },
+            {
+              "type": "quote",
+              "text": "\"它太赚钱了，被太多东西绑架了。\""
+            },
+            {
+              "type": "paragraph",
+              "paragraphs": [
+                "这不是\"做一个更好的电子游戏\"的改良冲动，而是对\"电子游戏=游戏\"这一单一叙事的彻底质疑。她选择离开的不仅是公司，更是整个被资本绑架的电子游戏工业。"
+              ]
+            },
+            {
+              "type": "key-value",
+              "items": [
+                {
+                  "label": "大厂职业路径",
+                  "value": "2023年主动离开互娱大厂，放弃高薪稳定"
+                },
+                {
+                  "label": "电子游戏媒介",
+                  "value": "不选择\"做更好的电子游戏\"，而是直接离开这个媒介"
+                },
+                {
+                  "label": "线性成功学",
+                  "value": "不追求 VC、不追求规模、不追求快速变现"
+                },
+                {
+                  "label": "当代艺术体制",
+                  "value": "不被 gallery 绑架，不做\"观念艺术\"式的自上而下表达"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "pervasive-game",
+          "title": "发现新可能",
+          "subtitle": "Pervasive Game 的转向",
+          "kind": "narrative",
+          "blocks": [
+            {
+              "type": "paragraph",
+              "paragraphs": [
+                "转折点：2024年参加雅典 Trust in Play camp（European School of Game Design）。"
+              ]
+            },
+            {
+              "type": "quote",
+              "text": "\"发现其实游戏在很多其他领域，它其实可以再跟很多东西进行交互的。然后我可能发现，诶，玩还是特别好玩，就 play 还是一个特别好的东西。\""
+            },
+            {
+              "type": "paragraph",
+              "paragraphs": [
+                "她把\"玩\"从电子屏幕中解放出来，放进真实世界——街道、俱乐部、办公室、高铁、美术馆。这是一种媒介层面的创造：不是改良旧媒介，而是发明新的游戏发生方式。"
+              ]
+            },
+            {
+              "type": "paragraph",
+              "paragraphs": [
+                "理论根基：阿久引用了学术著作《Pervasive Games》，将实践放在一个更广阔的谱系中："
+              ]
+            },
+            {
+              "type": "case-cards",
+              "items": [
+                {
+                  "title": "LARP（实况角色扮演）",
+                  "meta": [
+                    "参与者在现实空间中扮演角色"
+                  ],
+                  "description": "Club with no entry、Dancefloor Assassination"
+                },
+                {
+                  "title": "ARG（另类现实游戏）",
+                  "meta": [
+                    "侵入现实的解谜叙事"
+                  ],
+                  "description": "京都ARG、美术馆无限流解谜"
+                },
+                {
+                  "title": "城市游戏",
+                  "meta": [
+                    "以城市为游戏板的竞技"
+                  ],
+                  "description": "Warp and Weft、冲进黑夜尽头"
+                },
+                {
+                  "title": "街头游戏",
+                  "meta": [
+                    "利用公共空间的即兴规则"
+                  ],
+                  "description": "高铁暗杀作家游戏"
+                },
+                {
+                  "title": "怪体育",
+                  "meta": [
+                    "规则异常的体育竞技"
+                  ],
+                  "description": "VJ大战"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "section-3",
+          "title": "代表作品",
+          "subtitle": "把新可能带进现实",
+          "kind": "cases",
+          "blocks": [
+            {
+              "type": "case-cards",
+              "items": [
+                {
+                  "title": "Warp and Weft",
+                  "meta": [
+                    "街头竞技",
+                    "2024"
+                  ],
+                  "description": "只用一根16米绳子，让城市的所有物体成为游戏资源——栏杆=顶点，路人=队友。最小干预，最大涌现"
+                },
+                {
+                  "title": "冲进黑夜尽头",
+                  "meta": [
+                    "百人城市追逐",
+                    "2024.10"
+                  ],
+                  "description": "100人在上海夜晚从新天地逃到终点，僵尸传染机制。让熟悉的街区变得陌生"
+                },
+                {
+                  "title": "Dancefloor Assassination",
+                  "meta": [
+                    "LARP",
+                    "2024"
+                  ],
+                  "description": "在真实舞池里发生的暗杀游戏，把俱乐部变成剧场"
+                },
+                {
+                  "title": "第一届网络视频VJ大战",
+                  "meta": [
+                    "线上+线下竞技",
+                    "2025.03"
+                  ],
+                  "description": "只能用互联网已有的视频做VJ素材——把\"curation\"变成竞技，把技术正统抛到窗外"
+                },
+                {
+                  "title": "办公室暗杀游戏",
+                  "meta": [
+                    "一周长线渗透",
+                    "—"
+                  ],
+                  "description": "嫁接在真实工作流上（微信、OA、合同、电梯），让100+员工（含老板）被游戏规则重新组织"
+                },
+                {
+                  "title": "HTML Day 2026",
+                  "meta": [
+                    "线下聚会",
+                    "2026"
+                  ],
+                  "description": "在上海一起写网页——技术作为一种社交媒介"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "section-4",
+          "title": "设计方法论",
+          "subtitle": "八条创造原则",
+          "kind": "principles",
+          "blocks": [
+            {
+              "type": "paragraph",
+              "paragraphs": [
+                "从播客和实践中，可以提取出阿久与修四边形的创造方法论："
+              ]
+            },
+            {
+              "type": "method-list",
+              "items": [
+                {
+                  "index": "1",
+                  "title": "真实现场不可替代",
+                  "description": "游戏寄生在真实事件上——真演出、真团建、真派对。不建造模拟环境"
+                },
+                {
+                  "index": "2",
+                  "title": "message 是涌现的，不是预设的",
+                  "description": "不从\"想表达什么\"出发，而是搭舞台让玩家自己产生情感和思考"
+                },
+                {
+                  "index": "3",
+                  "title": "Design 是骨架，涌现是血肉",
+                  "description": "规则保证游戏\"能玩完\"，涌现保证游戏\"超乎想象\""
+                },
+                {
+                  "index": "4",
+                  "title": "规则是媒介，不是包装",
+                  "description": "把表达放在规则里——玩家在遵守规则的过程中，自然体会到设计者的意图"
+                },
+                {
+                  "index": "5",
+                  "title": "Playtest 是独特优势",
+                  "description": "直接看到人们怎么玩然后修正——经验主义的设计方法"
+                },
+                {
+                  "index": "6",
+                  "title": "production cycle 要短",
+                  "description": "电子游戏动辄数年 = 盲信；短周期 = 更多迭代 = 更接近真实"
+                },
+                {
+                  "index": "7",
+                  "title": "灵光一闪是可以训练的手艺",
+                  "description": "品味（看过好的） + 预判（想象现场越准，成功率越高）"
+                },
+                {
+                  "index": "8",
+                  "title": "管杀不管埋",
+                  "description": "只给\"要做什么\"，不给\"怎么做\"——让玩家 leverage 整个生活世界的行动能力"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "section-5",
+          "title": "命名即创造",
+          "subtitle": "\"修\"而非\"造\"",
+          "kind": "quote",
+          "blocks": [
+            {
+              "type": "quote",
+              "text": "\"修不了四边形，没有这个能力重建一个现实世界。\" —— Tianqi \"修这个字比较有美感吧。\" —— Joanna"
+            },
+            {
+              "type": "paragraph",
+              "paragraphs": [
+                "修四边形的名字本身就是一种创造性姿态：不是带着蓝图去建造一个新世界（那是技术乌托邦的傲慢），而是用手头已有的材料（上海的街道、商场、俱乐部、办公室、微信群）去撬动和变形。这种姿态同时是谦逊的（\"造不了\"）和激进的（\"撬开\"）。"
+              ]
+            }
+          ]
+        }
+      ],
+      "strength": "★★★★★"
+    },
+    {
+      "key": "live",
+      "title": "身心安顿 / Live Well",
+      "subtitle": "Live Well",
+      "intro": "\"如何在不确定、不断变化、也并不总是友好的现实里，依然能够诚实地面对自己，慢慢找到一种内在自洽，同时保有韧性的生活方式。\"",
+      "sections": [
+        {
+          "id": "section-1",
+          "title": "诚实面对",
+          "subtitle": "承认\"电子阳痿\"",
+          "kind": "narrative",
+          "blocks": [
+            {
+              "type": "paragraph",
+              "paragraphs": [
+                "阿久的故事起点并非英雄式的觉醒，而是一种诚实的疲惫："
+              ]
+            },
+            {
+              "type": "quote",
+              "text": "\"当时不是刚从大厂离职，觉得电子游戏已经没有什么特别，就觉得特别绝望，又加上这个电子阳痿，又加上被大厂折磨，觉得电子游戏没啥意思。\""
+            },
+            {
+              "type": "paragraph",
+              "paragraphs": [
+                "\"电子阳痿\"是一个极其诚实的自我诊断——不美化、不回避、不把职业危机包装成英雄叙事。她承认自己热爱的媒介让她失望了，承认自己被大厂消耗了，承认自己不知道该往哪里去。"
+              ]
+            },
+            {
+              "type": "paragraph",
+              "paragraphs": [
+                "这种诚实是\"身心安顿\"的前提：如果不承认自己在哪里受了伤，就不可能找到治愈的路。"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "section-2",
+          "title": "内在自洽",
+          "subtitle": "交叉补贴的经济伦理",
+          "kind": "narrative",
+          "blocks": [
+            {
+              "type": "paragraph",
+              "paragraphs": [
+                "阿久没有选择\"要么赚钱、要么纯粹\"的二元对立，而是找到了一条交叉补贴的中间道路："
+              ]
+            },
+            {
+              "type": "key-value",
+              "items": [
+                {
+                  "label": "主要收入来源",
+                  "value": "商业设计项目（NIKE等）、贴纸/merch销售、活动门票"
+                },
+                {
+                  "label": "免费/低利润活动",
+                  "value": "茶水间聚会、街头游戏、Game Jam——全部免费"
+                },
+                {
+                  "label": "经济逻辑",
+                  "value": "商业项目养独立创作——\"够做下一件事\"即可"
+                },
+                {
+                  "label": "拒绝的资本",
+                  "value": "大厂高薪、VC投资"
+                },
+                {
+                  "label": "利润率定位",
+                  "value": "不追求利润最大化，追求可持续的创作自由"
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "paragraphs": [
+                "这种经济模式的内在自洽在于：她知道自己需要多少钱、为什么需要这些钱、以及她不愿意为钱付出什么代价。商业项目不是\"妥协\"，而是让独立创作得以持续的条件；独立创作不是\"逃避\"，而是商业技能被用在真正相信的事情上。"
+              ]
+            },
+            {
+              "type": "paragraph",
+              "paragraphs": [
+                "参考对象：阿久明确提到纽约创意集体 MSCHF——\"又做有 message 的艺术项目，同时还是 toC 的，不需要被当代艺术绑架……同时也卖包。\"这是一种在经济上自洽、在创作上不弯腰的姿态。"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "section-3",
+          "title": "韧性",
+          "subtitle": "反加速的时间伦理",
+          "kind": "timeline",
+          "blocks": [
+            {
+              "type": "paragraph",
+              "paragraphs": [
+                "从2023年离开大厂到2026年，3年时间——没有追求VC、规模或快速变现，而是逐步积累："
+              ]
+            },
+            {
+              "type": "timeline",
+              "items": [
+                {
+                  "time": "2023",
+                  "title": "离开互娱大厂"
+                },
+                {
+                  "time": "2024",
+                  "title": "Trust in Play camp (雅典) ★ 转折点"
+                },
+                {
+                  "time": "2025",
+                  "title": "3月 第一届网络视频VJ大战"
+                },
+                {
+                  "time": "2026",
+                  "title": "3月 全球 Game Jam"
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "paragraphs": [
+                "时间伦理特征："
+              ]
+            },
+            {
+              "type": "bullet-list",
+              "items": [
+                "项目制而非增长制：不是\"越做越大\"，而是\"做完一个再做一个\"",
+                "容忍不确定性：茶水间从\"不小心来了一百多人\"到稳定运行——没有预设目标，允许自然生长",
+                "身份流动性：从大厂设计师→媒体艺术家→游戏设计师→VTuber→社群组织者——不把自己锁死在单一身份里"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "vtuber",
+          "title": "身份转换",
+          "subtitle": "VTuber 引退的自我诚实",
+          "kind": "narrative",
+          "blocks": [
+            {
+              "type": "paragraph",
+              "paragraphs": [
+                "2026年4月，阿久引退了自己的 VTuber 身份\"阿久aku\"。这不是失败，而是知道自己什么阶段需要什么身份的自我觉知。修四边形持续运作，但 VTuber 身份已完成其使命——一种干净的、不需要解释的告别。"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "section-5",
+          "title": "价值观作为内在锚点",
+          "subtitle": null,
+          "kind": "values",
+          "blocks": [
+            {
+              "type": "paragraph",
+              "paragraphs": [
+                "在15个案例的价值观热力图中，阿久的五个核心价值观均达到高强度："
+              ]
+            },
+            {
+              "type": "case-cards",
+              "items": [
+                {
+                  "title": "人先于利润/数字",
+                  "meta": [
+                    "████"
+                  ],
+                  "description": "离开大厂、免费活动、拒绝\"更赚钱\"的路径"
+                },
+                {
+                  "title": "真实先于表演",
+                  "meta": [
+                    "█████"
+                  ],
+                  "description": "茶水间分享\"半成品\"、面对面街头游戏、不包装"
+                },
+                {
+                  "title": "自由先于安全",
+                  "meta": [
+                    "█████"
+                  ],
+                  "description": "离职、实验性创作、不确定的社群运营"
+                },
+                {
+                  "title": "边缘先于中心",
+                  "meta": [
+                    "████"
+                  ],
+                  "description": "在\"街道\"而非\"美术馆\"做游戏"
+                },
+                {
+                  "title": "关系先于交易",
+                  "meta": [
+                    "█████"
+                  ],
+                  "description": "免费茶水间、game as social fabric"
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "paragraphs": [
+                "这些价值观不是宣言，而是每天在做的事情——当阿久选择免费开放茶水间、选择在街头而非美术馆做游戏、选择分享\"不完美的半成品\"时，她在用行动而非言语兑现这些价值。"
+              ]
+            }
+          ]
+        }
+      ],
+      "strength": "★★★★★"
+    },
+    {
+      "key": "benefit",
+      "title": "公共性 / Benefit Well",
+      "subtitle": "Benefit Well",
+      "intro": "\"如何在关照自我的同时，关切他人、回应周遭、关心公共，参与塑造我们共同身处的世界。\"",
+      "sections": [
+        {
+          "id": "section-1",
+          "title": "茶水间",
+          "subtitle": "为创作者建造的基础设施",
+          "kind": "narrative",
+          "blocks": [
+            {
+              "type": "paragraph",
+              "paragraphs": [
+                "茶水间是阿久和修四边形运营的定期游戏创作者聚会——它不是一个\"项目\"，而是一个平台："
+              ]
+            },
+            {
+              "type": "key-value",
+              "items": [
+                {
+                  "label": "形式",
+                  "value": "定期 meetup，创作者分享\"半成品\""
+                },
+                {
+                  "label": "规模",
+                  "value": "从\"不小心来了一百多人\"（小红书256赞）到稳定运行"
+                },
+                {
+                  "label": "精神",
+                  "value": "分享过程而非成品，降低参与门槛"
+                },
+                {
+                  "label": "门槛",
+                  "value": "不是展览/讲座——不用\"准备好\"才能来，带着半成品就可以"
+                },
+                {
+                  "label": "作用",
+                  "value": "连接上海独立游戏/创意技术/艺术亚文化圈层"
+                },
+                {
+                  "label": "费用",
+                  "value": "免费"
+                }
+              ]
+            },
+            {
+              "type": "quote",
+              "text": "\"想让创作者们来讲自己最近在做的东西。\""
+            },
+            {
+              "type": "paragraph",
+              "paragraphs": [
+                "茶水间的公共性意义：它让上海的独立游戏创作者有了一个可以彼此看见、彼此连接的空间。在商业游戏工业之外，在当代艺术体制之外，在学术圈之外——一个属于创作者自己的\"第三空间\"。它是让别人的创造得以发生的基础设施。"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "section-2",
+          "title": "街头游戏",
+          "subtitle": "让陌生人重新连接",
+          "kind": "narrative",
+          "blocks": [
+            {
+              "type": "paragraph",
+              "paragraphs": [
+                "阿久的 pervasive game 本质上是公共空间的重新激活："
+              ]
+            },
+            {
+              "type": "paragraph",
+              "paragraphs": [
+                "Warp and Weft：两个陌生人因为一根绳子被迫协作。栏杆不再是栏杆，是顶点；路人不再是路人，是队友。游戏让人重新\"阅读\"城市。"
+              ]
+            },
+            {
+              "type": "paragraph",
+              "paragraphs": [
+                "冲进黑夜尽头：100人在上海夜晚奔跑，僵尸传染机制让失败者变成追捕者——没有\"出局\"，只有身份的转换。玩家反馈说：\"他生活在这片区域，这个街区对他很熟，但他玩了这个游戏，觉得这个街道又很陌生。\"游戏让人重新感知自己生活的城市。"
+              ]
+            },
+            {
+              "type": "paragraph",
+              "paragraphs": [
+                "Club with No Entry：让玩家不买票混入俱乐部——不是教人逃票，而是让隐形的权力结构（VIP名单、门口歧视、消费主义势利）变得可见。真外卖员的意外闯入成为整个实践的完美隐喻：现实比设计更丰富，设计师要做的不是控制，而是创造让现实戏剧性自然涌现的框架。"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "section-3",
+          "title": "关系重建的三个层次",
+          "subtitle": null,
+          "kind": "relation-levels",
+          "blocks": [
+            {
+              "type": "paragraph",
+              "paragraphs": [
+                "阿久的实践在不同尺度上重建了人与人的连接："
+              ]
+            },
+            {
+              "type": "key-value",
+              "items": [
+                {
+                  "label": "层次 1",
+                  "value": "玩家与玩家之间：── 街头游戏中陌生人被迫协作、结盟与背叛、谈判"
+                },
+                {
+                  "label": "层次 2",
+                  "value": "创作者与创作者之间：── 茶水间去中心化的 peer community"
+                },
+                {
+                  "label": "层次 3",
+                  "value": "人与城市之间：── 通过游戏重新感知和使用公共空间"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "section-4",
+          "title": "国际连接",
+          "subtitle": "游戏作为世界语言",
+          "kind": "narrative",
+          "blocks": [
+            {
+              "type": "paragraph",
+              "paragraphs": [
+                "阿久的实践不是封闭的本地社群，而是有意识地连接国际："
+              ]
+            },
+            {
+              "type": "case-cards",
+              "items": [
+                {
+                  "title": "雅典 → 上海",
+                  "meta": [
+                    "输入"
+                  ],
+                  "description": "Trust in Play camp 带来 pervasive game 的视野"
+                },
+                {
+                  "title": "上海 → 纽约",
+                  "meta": [
+                    "输出"
+                  ],
+                  "description": "实时传真机、游戏交换"
+                },
+                {
+                  "title": "全球 Game Jam",
+                  "meta": [
+                    "双向"
+                  ],
+                  "description": "2026年3月，连接国际独立游戏社群"
+                },
+                {
+                  "title": "MSCHF",
+                  "meta": [
+                    "参照"
+                  ],
+                  "description": "纽约创意集体的模式作为修四边形的参考"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "section-5",
+          "title": "边界与选择",
+          "subtitle": "什么不是公共性",
+          "kind": "boundary",
+          "blocks": [
+            {
+              "type": "paragraph",
+              "paragraphs": [
+                "阿久的公共性不是无差别的。她明确不做什么，这些\"不做\"恰恰定义了公共性的边界："
+              ]
+            },
+            {
+              "type": "key-value",
+              "items": [
+                {
+                  "label": "不做纯电子游戏",
+                  "value": "电子游戏\"太赚钱了，被太多东西绑架了\""
+                },
+                {
+                  "label": "不做被 gallery 绑架的\"当代艺术\"",
+                  "value": "尽管在美术馆做过项目，但不被体制收编"
+                },
+                {
+                  "label": "不做 gamification 式的\"套皮游戏\"",
+                  "value": "\"没有利用游戏这个媒介\"——规则是媒介，不是包装"
+                },
+                {
+                  "label": "不做大规模复制",
+                  "value": "每一个游戏都是 site-specific，依赖具体的城市肌理"
+                },
+                {
+                  "label": "不做中国的 Mr. Beast",
+                  "value": "\"他的游戏其实设计得很差\""
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "section-6",
+          "title": "独有贡献",
+          "subtitle": "将\"游戏\"确立为公共行动的方法论",
+          "kind": "principles",
+          "blocks": [
+            {
+              "type": "paragraph",
+              "paragraphs": [
+                "在 B Community 的所有案例中，阿久/修四边形贡献了一种尚未被充分命名的方法论："
+              ]
+            },
+            {
+              "type": "quote",
+              "text": "Game as social fabric（游戏作为社会连接的织造术）"
+            },
+            {
+              "type": "paragraph",
+              "paragraphs": [
+                "不是 gamification（套皮游戏化）——给大富翁套一个环保主题；而是让规则本身成为媒介，玩家在遵守规则的过程中自然体会到设计者的意图。办公室暗杀游戏中\"必须让同事在合同里偷偷加上'修四边形'三个字\"——这个规则本身就是对职场沟通荒诞性的表达。"
+              ]
+            },
+            {
+              "type": "paragraph",
+              "paragraphs": [
+                "Tianqi 的总结："
+              ]
+            },
+            {
+              "type": "quote",
+              "text": "\"游戏设计它很难不去想象玩家，你很难不去跟真实世界和这些玩家有联系……它都会让你觉得跟这世界有联系。\""
+            },
+            {
+              "type": "paragraph",
+              "paragraphs": [
+                "这不是关于\"做游戏\"，而是关于通过游戏保持与世界的联系。"
+              ]
+            }
+          ]
+        }
+      ],
+      "strength": "★★★★★"
+    }
+  ],
+  "aiPersona": {
+    "title": "和 阿久、天琦 / 修四边形 对话",
+    "subtitle": "基于公开资料、良好生活三角与实践标签生成的成员视角",
+    "initialMessage": "你好，我是基于阿久、天琦 / 修四边形公开资料与良好生活三角整理出的讨论视角。你可以问我关于创造力、身心安顿、公共性或具体实践的问题。",
+    "inputPlaceholder": "问 阿久、天琦 / 修四边形 一个问题"
+  },
+  "knowledgeBase": {
+    "documentPaths": [
+      "knowledge-base/cleaned/good-life/rect_repair.md"
+    ],
+    "sourceLabels": [
+      "rect_repair.md"
+    ],
+    "lastUpdated": "2026-07-07"
+  }
+}

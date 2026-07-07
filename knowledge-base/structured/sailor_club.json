@@ -1,0 +1,450 @@
+{
+  "id": "sailor_club",
+  "profile": {
+    "name": "水手俱乐部"
+  },
+  "triangleTitle": "水手俱乐部的良好生活三角",
+  "triangleSubtitle": "基于该成员良好生活标准分类文件整理的创造力、身心安顿与公共性内容。",
+  "centerText": "围绕玩的创造者社区",
+  "centerSubtitle": "以食物、材料和游戏连接日常经验",
+  "dimensions": [
+    {
+      "key": "create",
+      "title": "创造力 / Create Well",
+      "subtitle": "Create Well",
+      "intro": "\"仍然愿意想象、表达、创造，是在既有路径之外，在线性的成功学叙事之外，并把一些新的可能带进现实。\"",
+      "sections": [
+        {
+          "id": "section-1",
+          "title": "\"玩\"作为创作方法",
+          "subtitle": null,
+          "kind": "principles",
+          "blocks": [
+            {
+              "type": "paragraph",
+              "paragraphs": [
+                "水手俱乐部的创造力起点不是\"做什么\"，而是\"怎么玩\"。它的核心主张是将\"玩\"确立为一种严肃的创作方法——不是用创作取代玩，而是让玩本身就是创作。"
+              ]
+            },
+            {
+              "type": "quote",
+              "text": "食物、材料、游戏——日常经验就是创作入口。"
+            },
+            {
+              "type": "paragraph",
+              "paragraphs": [
+                "这种方法的独特性在于：它不区分创作者和参与者。在 workshop 中，每个人都在\"玩\"，而正是在玩的过程中，新的表达和连接自然涌现。\"玩\"消解了\"专业创作者\"与\"普通参与者\"之间的壁垒。"
+              ]
+            },
+            {
+              "type": "key-value",
+              "items": [
+                {
+                  "label": "食物",
+                  "value": "以食物为媒介的工作坊——味觉、触觉、分享都是创作"
+                },
+                {
+                  "label": "材料",
+                  "value": "手工材料——身体与物质世界的直接互动"
+                },
+                {
+                  "label": "游戏",
+                  "value": "游戏机制——规则内的自由、集体性的创造"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "section-2",
+          "title": "跨媒介实践",
+          "subtitle": "工作坊 + 展览 + 播客",
+          "kind": "cases",
+          "blocks": [
+            {
+              "type": "paragraph",
+              "paragraphs": [
+                "水手俱乐部不局限于单一媒介，而是将三种形式编织在一起："
+              ]
+            },
+            {
+              "type": "case-cards",
+              "items": [
+                {
+                  "title": "工作坊（Workshop）",
+                  "meta": [
+                    "核心创作场域"
+                  ],
+                  "description": "参与式、动手做、体验式——创作发生在\"一起做\"的过程中"
+                },
+                {
+                  "title": "展览（Exhibition）",
+                  "meta": [
+                    "成果展示与公共表达"
+                  ],
+                  "description": "将工作坊的成果转化为可观看、可进入的空间叙事"
+                },
+                {
+                  "title": "播客（Podcast）",
+                  "meta": [
+                    "连接人与日常经验"
+                  ],
+                  "description": "以声音媒介延展对话，将现场的\"玩\"转化为可传播的叙事"
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "paragraphs": [
+                "这种跨媒介实践与修四边形的方法论有相似的底层逻辑：不是改良旧媒介，而是在媒介之间创造新的连接方式。"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "section-3",
+          "title": "\"水手\"之名",
+          "subtitle": "命名即姿态",
+          "kind": "narrative",
+          "blocks": [
+            {
+              "type": "quote",
+              "text": "\"水手\"（Sailor）——旅程、探索、流动性。"
+            },
+            {
+              "type": "paragraph",
+              "paragraphs": [
+                "命名本身就是一种创造性的自我定位："
+              ]
+            },
+            {
+              "type": "key-value",
+              "items": [
+                {
+                  "label": "旅程",
+                  "value": "不是抵达某个终点，而是持续在路上的状态"
+                },
+                {
+                  "label": "探索",
+                  "value": "不预设结果，允许发现未知"
+                },
+                {
+                  "label": "流动性",
+                  "value": "不被固定身份、固定场所、固定形式束缚"
+                },
+                {
+                  "label": "俱乐部",
+                  "value": "不是机构、不是品牌——是一个大家\"在一起\"的空间"
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "paragraphs": [
+                "这与修四边形\"修而非造\"的命名逻辑形成了有趣的对照：修四边形强调的是修补与撬动，水手俱乐部强调的是航行与发现。两种姿态都是对\"建造/生产\"范式的替代。"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "section-4",
+          "title": "与修四边形的方法论共鸣",
+          "subtitle": null,
+          "kind": "principles",
+          "blocks": [
+            {
+              "type": "paragraph",
+              "paragraphs": [
+                "水手俱乐部与修四边形在三个维度上共享价值观："
+              ]
+            },
+            {
+              "type": "case-cards",
+              "items": [
+                {
+                  "title": "游戏",
+                  "meta": [
+                    "pervasive game——让游戏侵入真实世界"
+                  ],
+                  "description": "\"玩\"作为创作方法——让创作变成游戏"
+                },
+                {
+                  "title": "社群",
+                  "meta": [
+                    "茶水间——为创作者建造的基础设施"
+                  ],
+                  "description": "工作坊——在共同制作中形成社群"
+                },
+                {
+                  "title": "公共空间",
+                  "meta": [
+                    "街头游戏——重新激活城市公共空间"
+                  ],
+                  "description": "城中村实践——在边缘空间创造连接"
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "paragraphs": [
+                "两者的共同信念：通过\"玩\"，在日常生活的缝隙中打开新的可能性。"
+              ]
+            }
+          ]
+        }
+      ],
+      "strength": "★★★★★"
+    },
+    {
+      "key": "live",
+      "title": "身心安顿 / Live Well",
+      "subtitle": "Live Well",
+      "intro": "\"如何在不确定、不断变化、也并不总是友好的现实里，依然能够诚实地面对自己，慢慢找到一种内在自洽，同时保有韧性的生活方式。\"",
+      "sections": [
+        {
+          "id": "section-1",
+          "title": "在城中村安身",
+          "subtitle": "边缘作为位置",
+          "kind": "narrative",
+          "blocks": [
+            {
+              "type": "paragraph",
+              "paragraphs": [
+                "水手俱乐部扎根于广州康乐村（Kangle Village），一个典型的城中村（urban village）。这不是\"找不到更好的地方\"，而是一种有意识的空间选择。"
+              ]
+            },
+            {
+              "type": "quote",
+              "text": "在城市的缝隙中工作，本身就是一种立场。"
+            },
+            {
+              "type": "key-value",
+              "items": [
+                {
+                  "label": "经济自洽",
+                  "value": "城中村的生活成本允许实验性的、不以盈利为首要目标的创作"
+                },
+                {
+                  "label": "边缘视角",
+                  "value": "不在CBD、不在创意园区——从边缘观察和参与城市"
+                },
+                {
+                  "label": "真实生活",
+                  "value": "城中村是日常生活密度最高的空间——食物、材料、人，都是创作资源"
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "paragraphs": [
+                "吉一·青造社作为水手俱乐部的实体据点，不是一个\"工作室\"或\"展厅\"，而是一个让\"玩\"和\"做\"可以持续发生的地方。"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "section-2",
+          "title": "共同制作中的归属感",
+          "subtitle": null,
+          "kind": "narrative",
+          "blocks": [
+            {
+              "type": "quote",
+              "text": "\"连接人和日常经验\"——实践本身就是归属感的来源。"
+            },
+            {
+              "type": "paragraph",
+              "paragraphs": [
+                "水手俱乐部的\"身心安顿\"不是通过独处或自我修炼实现的，而是在共同制作的过程中自然生成的："
+              ]
+            },
+            {
+              "type": "bullet-list",
+              "items": [
+                "一起做食物 → 分享味觉经验 → 建立了超越语言的连接",
+                "一起做手工 → 身体的共同在场 → 沉默中的彼此陪伴",
+                "一起玩游戏 → 规则中的自由 → 笑声中的彼此接纳"
+              ]
+            },
+            {
+              "type": "paragraph",
+              "paragraphs": [
+                "这种归属感不依赖于宣言或身份标签，而是在具体的\"做\"中自然编织而成。"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "section-3",
+          "title": "\"玩\"作为自我修复",
+          "subtitle": null,
+          "kind": "narrative",
+          "blocks": [
+            {
+              "type": "paragraph",
+              "paragraphs": [
+                "在一个以生产力和效率为衡量标准的社会里，\"玩\"常常被视为无用之事。水手俱乐部坚持\"玩\"的正当性，这本身就是一种对功利主义时间伦理的抵抗："
+              ]
+            },
+            {
+              "type": "key-value",
+              "items": [
+                {
+                  "label": "效率至上",
+                  "value": "不追求\"产出\"，只追求\"玩得尽兴\""
+                },
+                {
+                  "label": "专业壁垒",
+                  "value": "食物、手工、游戏——不需要专业训练就可以参与"
+                },
+                {
+                  "label": "社交表演",
+                  "value": "不需要\"认识人\"或\"建立人脉\"，一起做就够了"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "strength": "★★★★★"
+    },
+    {
+      "key": "benefit",
+      "title": "公共性 / Benefit Well",
+      "subtitle": "Benefit Well",
+      "intro": "\"如何在关照自我的同时，关切他人、回应周遭、关心公共，参与塑造我们共同身处的世界。\"",
+      "sections": [
+        {
+          "id": "section-1",
+          "title": "游戏 × 社群 × 公共空间",
+          "subtitle": "三维公共参与",
+          "kind": "contribution",
+          "blocks": [
+            {
+              "type": "paragraph",
+              "paragraphs": [
+                "水手俱乐部的公共性建立在三个维度的交织上："
+              ]
+            },
+            {
+              "type": "preformatted",
+              "text": "游戏\n        /  \\\n       /    \\\n      /      \\\n     /  水手  \\\n    /  俱乐部   \\\n   /            \\\n  /              \\\n社群 ────────────── 公共空间"
+            },
+            {
+              "type": "key-value",
+              "items": [
+                {
+                  "label": "游戏",
+                  "value": "\"玩\"是普世的语言——不设门槛，任何人都可以参与"
+                },
+                {
+                  "label": "社群",
+                  "value": "工作坊不是单向教学，而是所有人一起创造——去中心化的共同在场"
+                },
+                {
+                  "label": "公共空间",
+                  "value": "城中村、街道、社区——在真实的城市肌理中，而非封闭的白盒子空间"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "section-2",
+          "title": "在日常材料中连接彼此",
+          "subtitle": null,
+          "kind": "narrative",
+          "blocks": [
+            {
+              "type": "paragraph",
+              "paragraphs": [
+                "水手俱乐部选择食物、材料、游戏作为媒介——这些是所有人都拥有经验的东西："
+              ]
+            },
+            {
+              "type": "bullet-list",
+              "items": [
+                "食物：每个人都吃东西，都有关于食物的记忆和感受",
+                "材料：手工材料是触觉的、直觉的，不需要翻译",
+                "游戏：规则足够简单，所有人都可以立刻进入"
+              ]
+            },
+            {
+              "type": "paragraph",
+              "paragraphs": [
+                "这种\"低门槛\"不是妥协，而是公共性的前提：只有当参与不需要特殊知识或身份时，公共空间才真正向所有人敞开。"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "section-3",
+          "title": "广州替代性创意生态的一环",
+          "subtitle": null,
+          "kind": "narrative",
+          "blocks": [
+            {
+              "type": "paragraph",
+              "paragraphs": [
+                "水手俱乐部不是孤立的实践，而是广州替代性创意生态系统的一部分："
+              ]
+            },
+            {
+              "type": "key-value",
+              "items": [
+                {
+                  "label": "二高表演",
+                  "value": "同在广州，以身体和表演探索城市与身份"
+                },
+                {
+                  "label": "绣绣故事会",
+                  "value": "以叙事和手工连接社区"
+                },
+                {
+                  "label": "时代美术馆",
+                  "value": "广州当代艺术的重要节点"
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "paragraphs": [
+                "这个生态系统共享一种气质：在小尺度上深耕，在日常中创造，在边缘处连接。——不以规模或声量为目标，而是以关系的密度和质量为目标。"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "section-4",
+          "title": "媒体可见性",
+          "subtitle": "界面新闻的报道",
+          "kind": "narrative",
+          "blocks": [
+            {
+              "type": "paragraph",
+              "paragraphs": [
+                "水手俱乐部被界面新闻（Jiemian News）报道，这意味着其实践获得了公共媒体的注目。这不是\"出圈\"的刻意操作，而是实践本身的公共性自然吸引了外部的目光——当你在城中村认真做食物、做手工、带人玩游戏，这件事本身就具有足够的叙事力量。"
+              ]
+            }
+          ]
+        }
+      ],
+      "strength": "★★★★★"
+    }
+  ],
+  "aiPersona": {
+    "title": "和 水手俱乐部 对话",
+    "subtitle": "基于公开资料、良好生活三角与实践标签生成的成员视角",
+    "initialMessage": "你好，我是基于水手俱乐部公开资料与良好生活三角整理出的讨论视角。你可以问我关于创造力、身心安顿、公共性或具体实践的问题。",
+    "inputPlaceholder": "问 水手俱乐部 一个问题"
+  },
+  "knowledgeBase": {
+    "documentPaths": [
+      "knowledge-base/cleaned/good-life/sailor_club.md"
+    ],
+    "sourceLabels": [
+      "sailor_club.md"
+    ],
+    "lastUpdated": "2026-07-07"
+  }
+}
