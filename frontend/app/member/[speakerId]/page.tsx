@@ -40,6 +40,8 @@ type Message = {
     title: string;
     score: number;
     quote: string;
+    sourceFile?: string;
+    page?: number | null;
   }>;
 };
 
@@ -580,7 +582,10 @@ function AIChatPanel({
                 <div className="message-citations">
                   {message.citations.slice(0, 3).map((citation) => (
                     <span key={citation.chunk_id}>
-                      {citation.title} · {citation.score.toFixed(2)}
+                      {citation.sourceFile ?? citation.title}
+                      {citation.page ? ` · 第 ${citation.page} 页` : ""}
+                      {" · "}
+                      {citation.score.toFixed(2)}
                     </span>
                   ))}
                 </div>
@@ -754,7 +759,17 @@ export default function MemberPage() {
             chunk_id: citation.chunk_id,
             title: citation.title,
             score: citation.score,
-            quote: citation.quote
+            quote: citation.quote,
+            sourceFile:
+              typeof citation.metadata.source_file === "string"
+                ? citation.metadata.source_file
+                : typeof citation.metadata.sourceFile === "string"
+                  ? citation.metadata.sourceFile
+                  : undefined,
+            page:
+              typeof citation.metadata.page === "number"
+                ? citation.metadata.page
+                : null
           }))
         }
       ]);

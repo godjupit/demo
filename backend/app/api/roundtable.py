@@ -171,7 +171,11 @@ def _retrieve_speaker_context(speaker_id: str, question: str) -> tuple[str, list
     except Exception:
         chunks = []
 
-    chunks = [*local_chunks, *chunks]
+    chunks = sorted(
+        [*local_chunks, *chunks],
+        key=lambda chunk: chunk["score"],
+        reverse=True,
+    )
 
     if not chunks:
         return "暂未从 PostgreSQL/pgvector 检索到资料。", []

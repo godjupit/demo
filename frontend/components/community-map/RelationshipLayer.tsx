@@ -56,16 +56,15 @@ export function RelationshipLayer({
   hoveredMemberId,
   hoveredMemberClusterIds,
 }: RelationshipLayerProps) {
-  const speakerIdSet = new Set(speakers.map((s) => s.speaker_id));
-
   const groups = useMemo(() => {
+    const idSet = new Set(speakers.map((s) => s.speaker_id));
     return clusters.map((cluster) => ({
       cluster,
       connections: cluster.memberIds
         .map((mid) => ({ memberId: mid, pos: memberPositions[mid] }))
-        .filter((c) => c.pos && speakerIdSet.has(c.memberId)),
+        .filter((c) => c.pos && idSet.has(c.memberId)),
     }));
-  }, [clusters, memberPositions, speakerIdSet]);
+  }, [clusters, memberPositions, speakers]);
 
   return (
     <svg
