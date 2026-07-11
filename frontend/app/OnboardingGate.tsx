@@ -3,21 +3,171 @@
 import type { CSSProperties, ReactNode } from "react";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { AppleProp } from "@/components/onboarding/props/AppleProp";
-import { PlantProp } from "@/components/onboarding/props/PlantProp";
-import { FolderProp } from "@/components/onboarding/props/FolderProp";
-import { NotebookProp } from "@/components/onboarding/props/NotebookProp";
-import { LaptopProp } from "@/components/onboarding/props/LaptopProp";
-import { CoffeeCupProp } from "@/components/onboarding/props/CoffeeCupProp";
-import { PaperProp } from "@/components/onboarding/props/PaperProp";
-import { PencilProp } from "@/components/onboarding/props/PencilProp";
-import { LampProp } from "@/components/onboarding/props/LampProp";
+import { LandmarkIllustration } from "@/components/community-map/LandmarkIllustration";
+import type { LandmarkType } from "@/lib/memberMapVisuals";
 
 type OnboardingPage = "intro" | "values";
 type ValueKey = "create" | "live" | "benefit";
 
 const MAP_ROUTE = "/?view=map";
 const introTitle = "B Community";
+
+type OnboardingDecorAsset = LandmarkType | "cloud" | "tree" | "flower";
+
+type OnboardingDecorItem = {
+  id: string;
+  asset: OnboardingDecorAsset;
+  position: CSSProperties;
+  size: number;
+  rotation?: number;
+  opacity?: number;
+  className?: string;
+};
+
+const onboardingPage1Decor: OnboardingDecorItem[] = [
+  {
+    id: "intro-cloud-upper-left",
+    asset: "cloud",
+    position: { left: "9%", top: "10%" },
+    size: 118,
+    opacity: 0.52,
+    className: "decor-soft",
+  },
+  {
+    id: "intro-ice-cream",
+    asset: "ice-cream",
+    position: { left: "16%", top: "30%" },
+    size: 76,
+    rotation: 6,
+    opacity: 0.92,
+  },
+  {
+    id: "intro-courtyard-house",
+    asset: "courtyard-house",
+    position: { left: "7%", bottom: "12%" },
+    size: 124,
+    rotation: -2,
+  },
+  {
+    id: "intro-blue-book",
+    asset: "blue-book",
+    position: { left: "22%", bottom: "20%" },
+    size: 84,
+    rotation: -9,
+  },
+  {
+    id: "intro-flower-left",
+    asset: "flower",
+    position: { left: "28%", bottom: "10%" },
+    size: 58,
+    opacity: 0.82,
+    className: "decor-soft",
+  },
+  {
+    id: "intro-framed-painting",
+    asset: "framed-painting",
+    position: { right: "14%", top: "13%" },
+    size: 94,
+    rotation: 5,
+  },
+  {
+    id: "intro-cloud-right",
+    asset: "cloud",
+    position: { right: "8%", top: "28%" },
+    size: 108,
+    opacity: 0.45,
+    className: "decor-soft",
+  },
+  {
+    id: "intro-potted-flower",
+    asset: "potted-flower",
+    position: { right: "24%", top: "34%" },
+    size: 70,
+    opacity: 0.88,
+  },
+  {
+    id: "intro-sofa",
+    asset: "sofa",
+    position: { right: "8%", bottom: "17%" },
+    size: 132,
+    rotation: 2,
+  },
+  {
+    id: "intro-cat",
+    asset: "cat",
+    position: { right: "23%", bottom: "9%" },
+    size: 82,
+    rotation: -4,
+  },
+];
+
+const onboardingPage2Decor: OnboardingDecorItem[] = [
+  {
+    id: "values-cloud-left",
+    asset: "cloud",
+    position: { left: "7%", top: "10%" },
+    size: 112,
+    opacity: 0.42,
+    className: "decor-soft",
+  },
+  {
+    id: "values-ballet-dancer",
+    asset: "ballet-dancer",
+    position: { left: "14%", top: "20%" },
+    size: 78,
+    rotation: -8,
+  },
+  {
+    id: "values-apartment-building",
+    asset: "apartment-building",
+    position: { right: "11%", top: "12%" },
+    size: 90,
+    rotation: 2,
+  },
+  {
+    id: "values-family",
+    asset: "family-four",
+    position: { right: "8%", top: "31%" },
+    size: 82,
+    opacity: 0.9,
+  },
+  {
+    id: "values-courtyard-house",
+    asset: "courtyard-house",
+    position: { left: "6%", bottom: "17%" },
+    size: 116,
+    rotation: -3,
+  },
+  {
+    id: "values-flower-left",
+    asset: "potted-flower",
+    position: { left: "20%", bottom: "8%" },
+    size: 72,
+    rotation: 5,
+  },
+  {
+    id: "values-landscape-easel",
+    asset: "landscape-easel",
+    position: { right: "17%", bottom: "24%" },
+    size: 100,
+    rotation: -2,
+  },
+  {
+    id: "values-ceramic-bowl",
+    asset: "ceramic-bowl",
+    position: { right: "9%", bottom: "13%" },
+    size: 92,
+    rotation: 3,
+  },
+  {
+    id: "values-flower-right",
+    asset: "flower",
+    position: { right: "25%", bottom: "7%" },
+    size: 56,
+    opacity: 0.8,
+    className: "decor-soft",
+  },
+];
 
 const valueItems: Array<{
   key: ValueKey;
@@ -64,6 +214,83 @@ const valueItems: Array<{
 
 /* ── Page 1: Intro ── */
 
+function OnboardingTreeDecor() {
+  return (
+    <svg className="onboarding-map-decor-svg" viewBox="0 0 80 80" aria-hidden="true">
+      <rect x="35" y="45" width="10" height="22" rx="4" fill="#c49a62" />
+      <circle cx="31" cy="39" r="16" fill="#9fcb7d" />
+      <circle cx="48" cy="38" r="18" fill="#83b568" />
+      <circle cx="40" cy="25" r="16" fill="#badd93" />
+      <circle cx="31" cy="24" r="8" fill="#d9ecb8" opacity="0.78" />
+    </svg>
+  );
+}
+
+function OnboardingFlowerDecor() {
+  return (
+    <svg className="onboarding-map-decor-svg" viewBox="0 0 80 80" aria-hidden="true">
+      <path
+        d="M39 46 C34 52 31 59 30 68"
+        fill="none"
+        stroke="#8eb866"
+        strokeLinecap="round"
+        strokeWidth="4"
+      />
+      <path
+        d="M36 56 C28 53 22 55 18 62"
+        fill="none"
+        stroke="#8eb866"
+        strokeLinecap="round"
+        strokeWidth="4"
+      />
+      <circle cx="39" cy="32" r="9" fill="#ffd75e" />
+      <circle cx="39" cy="18" r="10" fill="#ff7f9b" />
+      <circle cx="53" cy="32" r="10" fill="#ff7f9b" />
+      <circle cx="39" cy="46" r="10" fill="#ff7f9b" />
+      <circle cx="25" cy="32" r="10" fill="#ff7f9b" />
+    </svg>
+  );
+}
+
+function OnboardingDecorAssetView({ asset }: { asset: OnboardingDecorAsset }) {
+  if (asset === "cloud") {
+    return <span className="onboarding-cloud-decor" />;
+  }
+  if (asset === "tree") {
+    return <OnboardingTreeDecor />;
+  }
+  if (asset === "flower") {
+    return <OnboardingFlowerDecor />;
+  }
+
+  return <LandmarkIllustration type={asset} className="onboarding-map-decor-svg" />;
+}
+
+function OnboardingDecorLayer({ items }: { items: OnboardingDecorItem[] }) {
+  return (
+    <div className="onboarding-props" aria-hidden="true">
+      {items.map((item, index) => (
+        <div
+          className={`onboarding-map-decor ${item.className ?? ""}`}
+          data-asset={item.asset}
+          key={item.id}
+          style={
+            {
+              ...item.position,
+              "--decor-size": `${item.size}px`,
+              "--decor-rotation": `${item.rotation ?? 0}deg`,
+              "--decor-delay": `${index * 0.18}s`,
+              opacity: item.opacity ?? 1,
+            } as CSSProperties
+          }
+        >
+          <OnboardingDecorAssetView asset={item.asset} />
+        </div>
+      ))}
+    </div>
+  );
+}
+
 function IntroPage({ onEnter }: { onEnter: () => void }) {
   const [typedText, setTypedText] = useState("");
   const [isTypingComplete, setIsTypingComplete] = useState(false);
@@ -101,36 +328,7 @@ function IntroPage({ onEnter }: { onEnter: () => void }) {
       className={`onboarding-shell onboarding-intro ${isLeaving ? "onboarding-intro--leaving" : ""}`}
       onClick={handleClick}
     >
-      {/* Background props layer */}
-      <div className="onboarding-props" aria-hidden="true">
-        <div className="onboarding-prop prop-apple-top">
-          <AppleProp size={52} accent="red" />
-        </div>
-        <div className="onboarding-prop prop-plant-top">
-          <PlantProp size={72} />
-        </div>
-        <div className="onboarding-prop prop-folder-top">
-          <FolderProp size={68} rotation={-6} />
-        </div>
-        <div className="onboarding-prop prop-notebook-top">
-          <NotebookProp size={58} rotation={4} />
-        </div>
-        <div className="onboarding-prop prop-laptop-bottom">
-          <LaptopProp size={76} rotation={-3} />
-        </div>
-        <div className="onboarding-prop prop-coffee-bottom">
-          <CoffeeCupProp size={44} rotation={-8} />
-        </div>
-        <div className="onboarding-prop prop-paper-left">
-          <PaperProp size={50} rotation={-5} />
-        </div>
-        <div className="onboarding-prop prop-pencil-right">
-          <PencilProp size={62} accent="orange" rotation={10} />
-        </div>
-        <div className="onboarding-prop prop-lamp-right">
-          <LampProp size={54} rotation={5} />
-        </div>
-      </div>
+      <OnboardingDecorLayer items={onboardingPage1Decor} />
 
       {/* Center content */}
       <section className="onboarding-intro-center" aria-live="polite">
@@ -166,39 +364,31 @@ function ValuesPage({ onEnter }: { onEnter: () => void }) {
 
   return (
     <main className="onboarding-shell onboarding-values">
+      <OnboardingDecorLayer items={onboardingPage2Decor} />
       {/* Background props */}
       <div className="onboarding-props" aria-hidden="true">
         {/* Create area — top */}
         <div className="onboarding-prop prop-apple-create">
-          <AppleProp size={46} accent="green" />
         </div>
         <div className="onboarding-prop prop-notebook-create">
-          <NotebookProp size={52} rotation={3} />
         </div>
         <div className="onboarding-prop prop-pencil-create">
-          <PencilProp size={56} accent="blue" rotation={-8} />
         </div>
 
         {/* Live area — left/bottom-left */}
         <div className="onboarding-prop prop-plant-live">
-          <PlantProp size={64} />
         </div>
         <div className="onboarding-prop prop-coffee-live">
-          <CoffeeCupProp size={40} rotation={-4} />
         </div>
         <div className="onboarding-prop prop-lamp-live">
-          <LampProp size={50} rotation={-6} />
         </div>
 
         {/* Benefit area — right/bottom-right */}
         <div className="onboarding-prop prop-folder-benefit">
-          <FolderProp size={60} rotation={5} />
         </div>
         <div className="onboarding-prop prop-paper-benefit">
-          <PaperProp size={48} rotation={-3} />
         </div>
         <div className="onboarding-prop prop-laptop-benefit">
-          <LaptopProp size={68} rotation={-5} />
         </div>
       </div>
 

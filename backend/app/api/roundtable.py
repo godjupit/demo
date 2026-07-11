@@ -142,7 +142,6 @@ def _format_history(history: list[RoundtableResponse]) -> str:
             "\n".join(
                 [
                     f"第 {index} 轮主题：{round_item.topic}",
-                    f"主持人计划：{round_item.moderator_plan}",
                     f"发言：{_format_turns(round_item.turns)}",
                     f"总结：{round_item.summary}",
                 ]
@@ -209,10 +208,6 @@ def _roundtable_messages(round_item: RoundtableResponse) -> list[dict]:
     messages: list[dict] = [
         {"role": "user", "content": round_item.topic},
     ]
-    if round_item.moderator_plan:
-        messages.append(
-            {"role": "assistant", "content": f"主持人计划：{round_item.moderator_plan}"}
-        )
     for turn in round_item.turns:
         messages.append(
             {
@@ -347,9 +342,9 @@ def roundtable(request: RoundtableRequest) -> RoundtableResponse:
         history=_format_history(request.history),
     )
     plan_fallback = (
-        "这个问题的核心张力在于：三位成员各自代表的实践经验如何互相校正。"
-        "本轮可以先让他们分别从自身实践切入，再比较社区关系、商业约束、"
-        "艺术行动、照护劳动或技术工具之间的差异。"
+        "本轮讨论可以先把问题放回三位成员各自的实践处境：一位回应社区与关系，"
+        "一位回应材料、生产或组织限制，另一位补充公共行动与日常经验。"
+        "主持人会观察他们之间的共识、分歧和可继续追问的线索。"
     )
     state["moderator_plan"] = call_llm("你是克制、清晰的圆桌主持人。", plan_prompt, plan_fallback)
 
@@ -387,7 +382,6 @@ def roundtable(request: RoundtableRequest) -> RoundtableResponse:
     summary_prompt = SUMMARY_TEMPLATE.format(
         topic=state["topic"],
         history=_format_history(request.history),
-        moderator_plan=state["moderator_plan"],
         turns=_format_turns(turns),
     )
     summary_fallback = (
@@ -433,9 +427,9 @@ def roundtable_stream(request: RoundtableRequest) -> StreamingResponse:
                 history=_format_history(request.history),
             )
             plan_fallback = (
-                "这个问题的核心张力在于：三位成员各自代表的实践经验如何互相校正。"
-                "本轮可以先让他们分别从自身实践切入，再比较社区关系、商业约束、"
-                "艺术行动、照护劳动或技术工具之间的差异。"
+                "本轮讨论可以先把问题放回三位成员各自的实践处境：一位回应社区与关系，"
+                "一位回应材料、生产或组织限制，另一位补充公共行动与日常经验。"
+                "主持人会观察他们之间的共识、分歧和可继续追问的线索。"
             )
             yield _sse("plan_start", {})
             plan_parts: list[str] = []
@@ -505,7 +499,6 @@ def roundtable_stream(request: RoundtableRequest) -> StreamingResponse:
             summary_prompt = SUMMARY_TEMPLATE.format(
                 topic=final_state["topic"],
                 history=_format_history(request.history),
-                moderator_plan=final_state["moderator_plan"],
                 turns=_format_turns(turns),
             )
             summary_fallback = (

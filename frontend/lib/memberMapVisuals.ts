@@ -16,6 +16,24 @@ export type LandmarkType =
   | "embroidery-workshop"
   | "climate-lab"
   | "sailor-club"
+  | "blue-book"
+  | "ballet-dancer"
+  | "sofa"
+  | "air-conditioner"
+  | "landscape-easel"
+  | "ice-cream"
+  | "ceramic-bowl"
+  | "framed-painting"
+  | "painter-person"
+  | "yarn-fabric"
+  | "apartment-building"
+  | "soccer-player"
+  | "potted-flower"
+  | "courtyard-house"
+  | "cat"
+  | "theater-stage"
+  | "family-four"
+  | "art-museum"
   | "generic-building"
   | "generic-character";
 
@@ -70,92 +88,92 @@ export const landscapePositions: Record<string, MemberPosition> = {
  */
 export const memberMapVisuals: Record<string, MemberMapVisual> = {
   luneurs: {
-    landmarkType: "bakery",
+    landmarkType: "ice-cream",
     mapStyleGroup: "company",
     shortLabel: "Luneurs",
   },
   arch: {
-    landmarkType: "material-lab",
+    landmarkType: "yarn-fabric",
     mapStyleGroup: "company",
     shortLabel: "Arch",
   },
   smart_air: {
-    landmarkType: "air-lab",
+    landmarkType: "air-conditioner",
     mapStyleGroup: "company",
     shortLabel: "Smart Air",
   },
   pottery_workshop: {
-    landmarkType: "pottery-workshop",
+    landmarkType: "ceramic-bowl",
     mapStyleGroup: "community",
     shortLabel: "乐天陶社",
   },
   mumo: {
-    landmarkType: "furniture-studio",
+    landmarkType: "sofa",
     mapStyleGroup: "company",
     shortLabel: "MUMO 木墨",
   },
   rect_repair: {
-    landmarkType: "game-character",
+    landmarkType: "landscape-easel",
     mapStyleGroup: "collective",
     shortLabel: "修四边形",
   },
   ge_yulu: {
-    landmarkType: "public-artist",
+    landmarkType: "painter-person",
     mapStyleGroup: "artist",
     shortLabel: "葛宇路",
   },
   ergao_ben: {
-    landmarkType: "performer",
+    landmarkType: "ballet-dancer",
     mapStyleGroup: "collective",
     shortLabel: "二高表演",
   },
   zhao_yiren: {
-    landmarkType: "community-house",
+    landmarkType: "courtyard-house",
     mapStyleGroup: "community",
     shortLabel: "定海桥互助社",
   },
   xiaohei: {
-    landmarkType: "craft-character",
+    landmarkType: "cat",
     mapStyleGroup: "artist",
     shortLabel: "小黑",
   },
   zhu_jingming: {
-    landmarkType: "writer-character",
+    landmarkType: "framed-painting",
     mapStyleGroup: "artist",
     shortLabel: "朱璟茗",
   },
   fang_chenchu: {
-    landmarkType: "publisher-kiosk",
+    landmarkType: "blue-book",
     mapStyleGroup: "collective",
     shortLabel: "晨初 / 假杂志",
   },
   liao_zhili: {
-    landmarkType: "art-space",
+    landmarkType: "family-four",
     mapStyleGroup: "artist",
     shortLabel: "Dweller",
   },
   xu_yihan: {
-    landmarkType: "community-garden",
+    landmarkType: "apartment-building",
     mapStyleGroup: "community",
     shortLabel: "起风了社区",
   },
   xiuxiu: {
-    landmarkType: "embroidery-workshop",
+    landmarkType: "theater-stage",
     mapStyleGroup: "collective",
     shortLabel: "绣绣故事会",
   },
   buzi: {
-    landmarkType: "embroidery-workshop",
+    landmarkType: "art-museum",
     mapStyleGroup: "collective",
     shortLabel: "不子 / 绣绣",
   },
   spring_changzhou: {
-    landmarkType: "climate-lab",
+    landmarkType: "potted-flower",
     mapStyleGroup: "collective",
     shortLabel: "春潮 Spring",
   },
   sailor_club: {
-    landmarkType: "sailor-club",
+    landmarkType: "soccer-player",
     mapStyleGroup: "community",
     shortLabel: "水手俱乐部",
   },

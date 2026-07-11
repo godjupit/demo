@@ -18,6 +18,26 @@ import { ClimateLabLandmark } from "./landmarks/ClimateLabLandmark";
 import { SailorClubLandmark } from "./landmarks/SailorClubLandmark";
 import { GenericBuildingLandmark } from "./landmarks/GenericBuildingLandmark";
 import { GenericCharacterLandmark } from "./landmarks/GenericCharacterLandmark";
+import {
+  AirConditionerLandmark,
+  ApartmentBuildingLandmark,
+  ArtMuseumLandmark,
+  BalletDancerLandmark,
+  BlueBookLandmark,
+  CatLandmark,
+  CeramicBowlLandmark,
+  CourtyardHouseLandmark,
+  FamilyFourLandmark,
+  FramedPaintingLandmark,
+  IceCreamLandmark,
+  LandscapeEaselLandmark,
+  PainterPersonLandmark,
+  PottedFlowerLandmark,
+  SoccerPlayerLandmark,
+  SofaLandmark,
+  TheaterStageLandmark,
+  YarnFabricLandmark,
+} from "./landmarks/NewMemberLandmarks";
 
 export type LandmarkIllustrationProps = {
   type: LandmarkType;
@@ -69,6 +89,42 @@ export function LandmarkIllustration({
       return <ClimateLabLandmark {...props} />;
     case "sailor-club":
       return <SailorClubLandmark {...props} />;
+    case "blue-book":
+      return <BlueBookLandmark {...props} />;
+    case "ballet-dancer":
+      return <BalletDancerLandmark {...props} />;
+    case "sofa":
+      return <SofaLandmark {...props} />;
+    case "air-conditioner":
+      return <AirConditionerLandmark {...props} />;
+    case "landscape-easel":
+      return <LandscapeEaselLandmark {...props} />;
+    case "ice-cream":
+      return <IceCreamLandmark {...props} />;
+    case "ceramic-bowl":
+      return <CeramicBowlLandmark {...props} />;
+    case "framed-painting":
+      return <FramedPaintingLandmark {...props} />;
+    case "painter-person":
+      return <PainterPersonLandmark {...props} />;
+    case "yarn-fabric":
+      return <YarnFabricLandmark {...props} />;
+    case "apartment-building":
+      return <ApartmentBuildingLandmark {...props} />;
+    case "soccer-player":
+      return <SoccerPlayerLandmark {...props} />;
+    case "potted-flower":
+      return <PottedFlowerLandmark {...props} />;
+    case "courtyard-house":
+      return <CourtyardHouseLandmark {...props} />;
+    case "cat":
+      return <CatLandmark {...props} />;
+    case "theater-stage":
+      return <TheaterStageLandmark {...props} />;
+    case "family-four":
+      return <FamilyFourLandmark {...props} />;
+    case "art-museum":
+      return <ArtMuseumLandmark {...props} />;
     case "generic-building":
       return <GenericBuildingLandmark {...props} />;
     case "generic-character":

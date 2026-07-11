@@ -33,9 +33,9 @@ def moderator_plan(state: RoundtableState) -> RoundtableState:
         speakers=_format_speakers(),
     )
     fallback = (
-        "这个问题的核心张力在于：社区、商业、艺术行动、照护和技术实践如何互相校正。"
-        "本轮可以让共益企业先回应可持续经营，再由个体与社群实践者补充地方、身体、"
-        "手作、游戏和公共空间中的具体经验。"
+        "本轮讨论可以先把问题放回三位成员各自的实践处境：一位回应社区与关系，"
+        "一位回应材料、生产或组织限制，另一位补充公共行动与日常经验。"
+        "主持人会观察他们之间的共识、分歧和可继续追问的线索。"
     )
     plan = call_llm("你是克制、清晰的圆桌主持人。", prompt, fallback)
     return {**state, "moderator_plan": plan}
@@ -79,7 +79,6 @@ def moderator_summary(state: RoundtableState) -> RoundtableState:
     prompt = SUMMARY_TEMPLATE.format(
         topic=state["topic"],
         history="暂无上一轮讨论。",
-        moderator_plan=state["moderator_plan"],
         turns=_format_turns(state["turns"]),
     )
     fallback = (
