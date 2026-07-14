@@ -5435,6 +5435,31 @@ h1 {
   cursor: pointer;
 }
 
+.chat-header-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.chat-panel-clear {
+  display: grid;
+  width: 32px;
+  height: 32px;
+  place-items: center;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #ffffff;
+  color: var(--muted);
+  cursor: pointer;
+  transition: color 0.15s, border-color 0.15s;
+}
+
+.chat-panel-clear:hover {
+  color: #ef4444;
+  border-color: #ef4444;
+}
+
 .compact-messages {
   gap: 12px;
   min-height: 0;

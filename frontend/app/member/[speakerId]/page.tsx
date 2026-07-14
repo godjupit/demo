@@ -11,6 +11,7 @@ import {
   MessageCircle,
   Quote,
   Send,
+  Trash2,
   UserRound,
   X
 } from "lucide-react";
@@ -530,6 +531,7 @@ function AIChatPanel({
   isLoading,
   isOpen,
   messages,
+  onClearHistory,
   onClose,
   onInput,
   onSubmit,
@@ -542,6 +544,7 @@ function AIChatPanel({
   isLoading: boolean;
   isOpen: boolean;
   messages: Message[];
+  onClearHistory: () => void;
   onClose: () => void;
   onInput: (value: string) => void;
   onSubmit: (event: FormEvent<HTMLFormElement>) => void;
@@ -565,7 +568,18 @@ function AIChatPanel({
         <button className="chat-panel-close" onClick={onClose} type="button">
           <X size={16} />
         </button>
-        <span className="status">1:1</span>
+        <div className="chat-header-actions">
+          <span className="status">1:1</span>
+          <button
+            aria-label="清除历史对话"
+            className="chat-panel-clear"
+            onClick={onClearHistory}
+            title="清除历史对话"
+            type="button"
+          >
+            <Trash2 size={16} />
+          </button>
+        </div>
       </div>
 
       {error ? <p className="error-text">服务暂时不可用：{error}</p> : null}
@@ -727,6 +741,14 @@ export default function MemberPage() {
     }, 220);
   }
 
+  function handleClearHistory() {
+    const stored = readStoredThreadIds();
+    delete stored[speakerId];
+    localStorage.setItem(THREAD_STORAGE_KEY, JSON.stringify(stored));
+    setThreadId(null);
+    setMessages([introForProfile(profileData, speaker)]);
+  }
+
   async function handleSendMessage(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     if (!canSend || !speaker) {
@@ -796,6 +818,7 @@ export default function MemberPage() {
         isLoading={isLoading}
         isOpen={isChatPanelOpen}
         messages={messages}
+        onClearHistory={handleClearHistory}
         onClose={() => setIsChatPanelOpen(false)}
         onInput={setInput}
         onSubmit={handleSendMessage}
