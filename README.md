@@ -1,4 +1,4 @@
-# Community Agent
+# Constellia - Community Agent
 
 面向社区知识管理、成员问答与多角色圆桌讨论的 AI Agent 应用。项目以 B Community 成员资料为知识基础，结合 RAG、对话记忆与角色化提示词，让用户可以围绕社区实践、组织经验和人物资料进行可追溯的对话与讨论。
 
