@@ -44,6 +44,12 @@ body {
   min-height: 100%;
 }
 
+html:has(.onboarding-shell),
+body:has(.onboarding-shell) {
+  overflow: hidden;
+  height: 100%;
+}
+
 body {
   margin: 0;
   background: var(--app-page-bg);
@@ -52,7 +58,6 @@ body {
   font-family: Arial, "PingFang SC", "Microsoft YaHei", sans-serif;
 }
 
-.onboarding-shell,
 .picker-list,
 .member-profile-panel,
 .profile-panel,
@@ -65,7 +70,6 @@ body {
   scrollbar-width: thin;
 }
 
-.onboarding-shell::-webkit-scrollbar,
 .picker-list::-webkit-scrollbar,
 .member-profile-panel::-webkit-scrollbar,
 .profile-panel::-webkit-scrollbar,
@@ -78,7 +82,6 @@ body {
   height: var(--scrollbar-width);
 }
 
-.onboarding-shell::-webkit-scrollbar-track,
 .picker-list::-webkit-scrollbar-track,
 .member-profile-panel::-webkit-scrollbar-track,
 .profile-panel::-webkit-scrollbar-track,
@@ -90,7 +93,6 @@ body {
   background: var(--scrollbar-track);
 }
 
-.onboarding-shell::-webkit-scrollbar-thumb,
 .picker-list::-webkit-scrollbar-thumb,
 .member-profile-panel::-webkit-scrollbar-thumb,
 .profile-panel::-webkit-scrollbar-thumb,
@@ -104,7 +106,6 @@ body {
   background: var(--scrollbar-thumb);
 }
 
-.onboarding-shell::-webkit-scrollbar-thumb:hover,
 .picker-list::-webkit-scrollbar-thumb:hover,
 .member-profile-panel::-webkit-scrollbar-thumb:hover,
 .profile-panel::-webkit-scrollbar-thumb:hover,
@@ -116,7 +117,6 @@ body {
   background: var(--scrollbar-thumb-hover);
 }
 
-.onboarding-shell::-webkit-scrollbar-corner,
 .picker-list::-webkit-scrollbar-corner,
 .member-profile-panel::-webkit-scrollbar-corner,
 .profile-panel::-webkit-scrollbar-corner,
@@ -714,10 +714,8 @@ body {
 
 @media (max-width: 768px) {
   .onboarding-shell {
-    height: auto;
-    min-height: 100vh;
-    overflow-x: hidden;
-    overflow-y: auto;
+    height: 100vh;
+    overflow: hidden;
   }
 
   .onboarding-intro {
